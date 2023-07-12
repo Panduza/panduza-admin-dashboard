@@ -9,8 +9,7 @@ import os
 import platform
 
 
-# f platform.system() == “Linux”:
-#      print(“Linux”)
+import pkg_resources
 
 
 
@@ -52,11 +51,14 @@ class StepSystemControl:
         self.ui_stepper = stepper
 
         # Build ui
-        with ui.step('System check') as step:
-
-            # step.on_enabled_change = self.__on_enabled_change
+        with ui.step('System checks') as step:
             self.ui_step = step
+            ui.label('Need to check system requirements')
             ui.button("Check system", on_click=self.__start_worker)
+
+            with ui.stepper_navigation():
+                ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
+                ui.button('Back', on_click=stepper.previous).props('flat')
 
     # ---
 
@@ -70,7 +72,8 @@ class StepSystemControl:
             os = text[len("Distributor ID:\t"):]
             ui_log_area.push(os)
 
-            if os != "ubuntu":
+            if os != "Ubuntu":
+                ui_log_area.push("not supported yet")
                 return False
 
         # Check os
@@ -82,6 +85,7 @@ class StepSystemControl:
             ui_log_area.push(release)
 
             if release != "22.04":
+                ui_log_area.push("not supported yet")
                 return False
 
         return True
@@ -93,80 +97,21 @@ class StepSystemControl:
         ui_og = ui.log().classes('w-full h-96')
         
         # Run the worker
+        success = False
         with concurrent.futures.ThreadPoolExecutor() as executor:
             future = executor.submit(self.worker, ui_og)
             while not future.done():
                 await asyncio.sleep(0.5)
-            result = future.result()
+            success = future.result()
 
-        
-        ui_icon = ui.avatar('check_circle', color='green', text_color='grey-11', rounded=True)
+        if success:
+            ui_icon = ui.avatar('check_circle', color='green', text_color='grey-11', rounded=True)
+            await asyncio.sleep(2)
+            # self.ui_step.remove(ui_og)
+            # self.ui_step.remove(ui_icon)
+            self.ui_stepper.next()
 
-        await asyncio.sleep(2)
-        self.ui_step.remove(ui_og)
-        self.ui_step.remove(ui_icon)
-        
-        # self.ui_stepper.next() 
-
-
-
-        # # Create a thread object
-        # thread = threading.Thread(target=self.my_thread)
-
-        # # Start the thread
-        # thread.start()
-
-        # log.push("start !!!!")
-
-        # # Check if the thread is alive in a loop
-        # while thread.is_alive():
-        #     # Do other work here, or simply wait
-            
-        #     await asyncio.sleep(0.2)
-        #     log.push("wait !!!!")
-
-
-        # log.push("endd !!!!")
-
-        # # self.step.remove(0)
-            
-
-        # cmd = ["apt-get", "update"]
-        # process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-        # # Read the output and error streams
-        # while True:
-        #     # Poll the process to check if it has terminated
-        #     poll = process.poll()
-        #     if poll is not None:
-        #         break
-
-        #     # Read stdout and stderr
-        #     output = process.stdout.readline().decode().strip()
-        #     error = process.stderr.readline().decode().strip()
-
-        #     # Print the output and error
-        #     if output:
-        #         print("Output:", output)
-        #     if error:
-        #         print("Error:", error)
-
-        # # Check if there is any remaining output or error
-        # remaining_output = process.stdout.read().decode().strip()
-        # remaining_error = process.stderr.read().decode().strip()
-        # if remaining_output:
-        #     print("Remaining Output:", remaining_output)
-        # if remaining_error:
-        #     print("Remaining Error:", remaining_error)
-
-        # # Get the return code of the process
-        # return_code = process.returncode
-        # print("Return Code:", return_code)
-
-
-        # # for line in process.stdout:
-        # #     log.push(line)
-
-        
+        else:
+            ui_icon = ui.avatar('check_circle', color='red', text_color='grey-11', rounded=True)
 
 
