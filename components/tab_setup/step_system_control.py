@@ -44,6 +44,9 @@ def execute_sys_cmd(cmd, ui_log_area):
 
 class StepSystemControl:
 
+    def Name():
+        return 'System Checks'
+
     # ---
 
     def __init__(self, stepper) -> None:
@@ -51,14 +54,15 @@ class StepSystemControl:
         self.ui_stepper = stepper
 
         # Build ui
-        with ui.step('System checks') as step:
+        with ui.step(StepSystemControl.Name()) as step:
             self.ui_step = step
             ui.label('Need to check system requirements')
-            ui.button("Check system", on_click=self.__start_worker)
 
-            with ui.stepper_navigation():
-                ui.button('Done', on_click=lambda: ui.notify('Yay!', type='positive'))
-                ui.button('Back', on_click=stepper.previous).props('flat')
+            with ui.stepper_navigation() as nav:
+                self.ui_nav = nav
+                ui.button("Check system", on_click=self.start_worker)
+                # ui.button('Back', on_click=stepper.previous).props('flat')
+
 
     # ---
 
@@ -92,10 +96,12 @@ class StepSystemControl:
 
     # ---
 
-    async def __start_worker(self):
+    async def start_worker(self):
+
         # Create a log area
         ui_og = ui.log().classes('w-full h-96')
-        
+        ui_og.move(self.ui_step)
+
         # Run the worker
         success = False
         with concurrent.futures.ThreadPoolExecutor() as executor:
@@ -105,13 +111,13 @@ class StepSystemControl:
             success = future.result()
 
         if success:
-            ui_icon = ui.avatar('check_circle', color='green', text_color='grey-11', rounded=True)
-            await asyncio.sleep(2)
-            # self.ui_step.remove(ui_og)
-            # self.ui_step.remove(ui_icon)
+            ui_icon = ui.button('Next', icon='check_circle', color='green', on_click=self.ui_stepper.next)
+            ui_icon.move(self.ui_step)
+            await asyncio.sleep(1)
             self.ui_stepper.next()
 
         else:
             ui_icon = ui.avatar('check_circle', color='red', text_color='grey-11', rounded=True)
+            ui_icon.move(self.ui_step)
 
 

@@ -7,10 +7,8 @@ import asyncio
 import concurrent
 import os
 import platform
-
-
-import pkg_resources
-
+import importlib.util
+import sys
 
 
 
@@ -51,21 +49,41 @@ class StepSetupPanduza:
         self.ui_stepper = stepper
 
         # Build ui
-        with ui.step('Setup Panduza') as step:
+        with ui.step('Install Panduza') as step:
             self.ui_step = step
-            ui.label('Need to check system requirements')
+            ui.label('Need to install panduza')
 
-            # with ui.stepper_navigation():
-            #     ui.button("Check system", on_click=self.__start_worker)
+            with ui.stepper_navigation():
+                ui.button("Install Panduza", on_click=self.start_worker)
+                ui.button('Back', on_click=stepper.previous).props('flat')
 
     # ---
 
-    # def worker(self, ui_log_area):
+    def worker(self, ui_log_area):
 
-    #     # Check distribution
-    #     ui_log_area.push("Check Distribution")
-    #     cmd = ["lsb_release", "-i"]
-    #     text = execute_sys_cmd(cmd, ui_log_area)
+        # Check distribution
+        ui_log_area.push("Check that platform is installed")
+
+
+
+        name = 'panduza_platform'
+        if name in sys.modules:
+            ui_log_area.push(f"{name!r} already in sys.modules")
+        elif (spec := importlib.util.find_spec(name)) is not None:
+            ui_log_area.push("found !")
+        else:
+            ui_log_area.push("NOT found !")
+
+            cmd = [sys.executable, '-m', 'pip', 'install', "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=platform"]
+            execute_sys_cmd(cmd, ui_log_area)
+
+            # import subprocess
+            # # implement pip as a subprocess:
+            # subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
+            # '<packagename>'])
+
+
+        
     #     if text.startswith("Distributor ID:"):
     #         os = text[len("Distributor ID:\t"):]
     #         ui_log_area.push(os)
@@ -88,28 +106,28 @@ class StepSetupPanduza:
 
     #     return True
 
-    # # ---
+    # ---
 
-    # async def __start_worker(self):
-    #     # Create a log area
-    #     ui_og = ui.log().classes('w-full h-96')
-        
-    #     # Run the worker
-    #     success = False
-    #     with concurrent.futures.ThreadPoolExecutor() as executor:
-    #         future = executor.submit(self.worker, ui_og)
-    #         while not future.done():
-    #             await asyncio.sleep(0.5)
-    #         success = future.result()
+    async def start_worker(self):
+        # Create a log area
+        ui_og = ui.log().classes('w-full h-96')
 
-    #     if success:
-    #         ui_icon = ui.avatar('check_circle', color='green', text_color='grey-11', rounded=True)
-    #         await asyncio.sleep(2)
-    #         # self.ui_step.remove(ui_og)
-    #         # self.ui_step.remove(ui_icon)
-    #         self.ui_stepper.next()
+        # Run the worker
+        success = False
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            future = executor.submit(self.worker, ui_og)
+            while not future.done():
+                await asyncio.sleep(0.5)
+            success = future.result()
 
-    #     else:
-    #         ui_icon = ui.avatar('check_circle', color='red', text_color='grey-11', rounded=True)
+        if success:
+            ui_icon = ui.avatar('check_circle', color='green', text_color='grey-11', rounded=True)
+            await asyncio.sleep(2)
+            # self.ui_step.remove(ui_og)
+            # self.ui_step.remove(ui_icon)
+            self.ui_stepper.next()
+
+        else:
+            ui_icon = ui.avatar('check_circle', color='red', text_color='grey-11', rounded=True)
 
 
