@@ -9,9 +9,6 @@ import os
 import platform
 
 
-import pkg_resources
-
-
 
 
 def execute_sys_cmd(cmd, ui_log_area):
@@ -21,22 +18,33 @@ def execute_sys_cmd(cmd, ui_log_area):
     text = ""
     process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
-    while True:
+    alive = True
+    while alive:
         # Poll the process to check if it has terminated
         poll = process.poll()
         if poll is not None:
-            break
+            alive = False
 
         # Read stdout and stderr
-        output = process.stdout.readline().decode().strip()
-        error = process.stderr.readline().decode().strip()
-        if output:
-            text += output
-            ui_log_area.push(f"\t{output}")
-        if error:
-            text += error
-            ui_log_area.push(f"\t{error}")
+        data_available = True
+        while data_available:
+            output = process.stdout.readline().decode().strip()
+            if output:
+                text += output
+                ui_log_area.push(f"\t{output}")
+            else:
+                data_available = False
+        
 
+        data_available = True
+        while data_available:
+            error = process.stderr.readline().decode().strip()
+            if error:
+                text += error
+                ui_log_area.push(f"\t{error}")
+            else:
+                data_available = False
+                
     ui_log_area.push("---")
 
     return text

@@ -11,34 +11,7 @@ import importlib.util
 import sys
 
 
-
-def execute_sys_cmd(cmd, ui_log_area):
-
-    ui_log_area.push(f"---\n\t$> {cmd}")
-
-    text = ""
-    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    while True:
-        # Poll the process to check if it has terminated
-        poll = process.poll()
-        if poll is not None:
-            break
-
-        # Read stdout and stderr
-        output = process.stdout.readline().decode().strip()
-        error = process.stderr.readline().decode().strip()
-        if output:
-            text += output
-            ui_log_area.push(f"\t{output}")
-        if error:
-            text += error
-            ui_log_area.push(f"\t{error}")
-
-    ui_log_area.push("---")
-
-    return text
-
+from .step_system_control import execute_sys_cmd
 
 class StepSetupPanduza:
 
@@ -74,37 +47,94 @@ class StepSetupPanduza:
         else:
             ui_log_area.push("NOT found !")
 
-            cmd = [sys.executable, '-m', 'pip', 'install', "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=platform"]
+
+        reqs = [
+            "aardvark-py==5.40",
+            "colorama==0.4.6",
+            "paho-mqtt==1.6.1",
+            "pyftdi==0.54.0",
+            "pymodbus==3.3.2",
+            "pyserial==3.5",
+            "pyudev==0.24.0",
+            "pyusb==1.2.1",
+            "PyHamcrest==2.0.4",
+        ]
+
+        for r in reqs:       
+            cmd = ['pip', 'install', r]
             execute_sys_cmd(cmd, ui_log_area)
 
-            # import subprocess
-            # # implement pip as a subprocess:
-            # subprocess.check_call([sys.executable, '-m', 'pip', 'install', 
-            # '<packagename>'])
-
+        cmd = ['pip', 'install', "git+https://github.com/Panduza/panduza-py.git@pico_dio_integration#egg=panduza_platform&subdirectory=platform/", "--no-color"]
+        execute_sys_cmd(cmd, ui_log_area)
 
         
-    #     if text.startswith("Distributor ID:"):
-    #         os = text[len("Distributor ID:\t"):]
-    #         ui_log_area.push(os)
+        filename="/usr/local/bin/pza-py-platform-run.py"
+        ui_log_area.push(f"Write file: {filename}")
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "w") as f:
+            f.write("""
+import sys
+import pathlib
+import argparse
+from panduza_platform import Platform
 
-    #         if os != "Ubuntu":
-    #             ui_log_area.push("not supported yet")
-    #             return False
+import logging
 
-    #     # Check os
-    #     ui_log_area.push("Check Release")
-    #     cmd = ["lsb_release", "-r"]
-    #     text = execute_sys_cmd(cmd, ui_log_area)
-    #     if text.startswith("Release:"):
-    #         release = text[len("Release:\t"):]
-    #         ui_log_area.push(release)
+# Initialize log file
+pathlib.Path("/etc/panduza/log").mkdir(parents=True, exist_ok=True)
+logging.basicConfig(filename="/etc/panduza/log/py.log", 
+					format='%(asctime)s | %(name)s | %(message)s', 
+					filemode='w') 
 
-    #         if release != "22.04":
-    #             ui_log_area.push("not supported yet")
-    #             return False
 
-    #     return True
+parser = argparse.ArgumentParser()
+parser.add_argument('tree', nargs='?', default=None)
+args = parser.parse_args()
+
+
+srv = Platform()
+if args.tree != None:
+    srv.load_tree_overide(args.tree)
+srv.run()
+logging.warning("Platform stopped !")
+            """)
+
+
+        filename="/etc/systemd/system/panduza-py-platform.service"
+        ui_log_area.push(f"Write file: {filename}")
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "w") as f:
+            f.write("""
+[Unit]
+Description=Platform Python to support Panduza Meta Drivers
+After=network.target
+
+[Service]
+User=root
+ExecStart=/usr/bin/python3 /usr/local/bin/pza-py-platform-run.py
+
+[Install]
+WantedBy=multi-user.target
+            """)
+
+
+
+        cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
+        execute_sys_cmd(cmd, ui_log_area)
+
+
+        # systemctl status application.service
+
+        # auto start
+        # sudo systemctl enable application.service
+        # sudo systemctl disable application.service
+
+        # start/stop
+        # sudo systemctl start application
+        # sudo systemctl stop application.service
+
+        return True
+        
 
     # ---
 

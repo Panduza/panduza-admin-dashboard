@@ -3,6 +3,8 @@
 from nicegui import ui
 
 from components.tab_setup import TabSetup
+from components.tab_control import TabControl
+
 
 class Dashboard:
     """Main Entry Point
@@ -21,7 +23,17 @@ class Dashboard:
             ui.label("Test dashboard")
 
 
-        tab = TabSetup()
+        with ui.left_drawer() as left_drawer:
+            with ui.tabs().classes('w-full').props("vertical") as tabs:
+                one = ui.tab('Setup')
+                two = ui.tab('Control')
+                
+        with ui.tab_panels(tabs, value=two).classes('w-full'):
+            with ui.tab_panel(one):
+                tab = TabSetup()
+            with ui.tab_panel(two):
+                t = TabControl()
+            
 
 
         with ui.footer() as footer:
