@@ -118,9 +118,14 @@ WantedBy=multi-user.target
             """)
 
 
+        filename="/etc/sudoers.d/panduza"
+        ui_log_area.push(f"Write file: {filename}")
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "w") as f:
+            f.write("%LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service")
 
         return True
-        
+
 
     # ---
 

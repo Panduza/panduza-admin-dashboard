@@ -5,6 +5,7 @@ from nicegui import ui
 from components.tab_setup import TabSetup
 from components.tab_control import TabControl
 
+from utils import execute_sys_cmd
 
 class Dashboard:
     """Main Entry Point
@@ -14,20 +15,26 @@ class Dashboard:
         pass
 
     def test(self):
-        print("okkk")
+        cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
+        text = execute_sys_cmd(cmd)
+        print(">>>>>>>>>>>>>> ", text)
+
+    def start___(self):
+        cmd = ['systemctl', 'start', "panduza-py-platform.service"]
+        text = execute_sys_cmd(cmd)
 
     def run(self):
         # HEADER
         with ui.header().classes() as header:
 
             with ui.splitter(horizontal=False, reverse=False, value=60, on_change=lambda e: ui.notify(e.value)).classes("w-full") as splitter:
-                
+
                 with splitter.before:
                     ui.button(on_click = lambda: self.ui_left_drawer.toggle()).props('flat color=white icon=menu')
                     ui.label("Test dashboard")
 
                 with splitter.after:
-                    ui.button(text="start", on_click = lambda: self.ui_left_drawer.toggle())
+                    ui.button(text="start", on_click = lambda: self.start___())
 
         # 
         with ui.left_drawer() as left_drawer:
