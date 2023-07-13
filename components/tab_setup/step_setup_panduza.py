@@ -119,20 +119,6 @@ WantedBy=multi-user.target
 
 
 
-        cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
-        execute_sys_cmd(cmd, ui_log_area)
-
-
-        # systemctl status application.service
-
-        # auto start
-        # sudo systemctl enable application.service
-        # sudo systemctl disable application.service
-
-        # start/stop
-        # sudo systemctl start application
-        # sudo systemctl stop application.service
-
         return True
         
 

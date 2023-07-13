@@ -1,1 +1,4 @@
 nicegui==1.2.24
+pystemd==0.13.2
+pyjournalctl==0.7.0
+
