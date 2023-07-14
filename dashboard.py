@@ -4,6 +4,9 @@ from nicegui import ui
 
 from components.tab_setup import TabSetup
 from components.tab_control import TabControl
+from components.tab_platform_logs import TabPlatformLogs
+
+from components.button_start_stop import ButtonStartStop
 
 from utils import execute_sys_cmd
 
@@ -14,12 +17,9 @@ class Dashboard:
     def __init__(self) -> None:
         pass
 
-    def test(self):
-        cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
-        text = execute_sys_cmd(cmd)
-        print(">>>>>>>>>>>>>> ", text)
 
     def start___(self):
+        print("----")
         cmd = ['systemctl', 'start', "panduza-py-platform.service"]
         text = execute_sys_cmd(cmd)
 
@@ -34,7 +34,7 @@ class Dashboard:
                     ui.label("Test dashboard")
 
                 with splitter.after:
-                    ui.button(text="start", on_click = lambda: self.start___())
+                    ButtonStartStop()
 
         # 
         with ui.left_drawer() as left_drawer:
@@ -42,6 +42,7 @@ class Dashboard:
             with ui.tabs().classes('w-full').props("vertical") as tabs:
                 one = ui.tab('Setup')
                 two = ui.tab('Control')
+                three = ui.tab('Logs')
 
         # 
         with ui.tab_panels(tabs, value=two).classes('w-full'):
@@ -49,6 +50,10 @@ class Dashboard:
                 tab = TabSetup()
             with ui.tab_panel(two):
                 t = TabControl()
+            with ui.tab_panel(two):
+                t = TabControl()
+            with ui.tab_panel(three).classes("h-full"):
+                TabPlatformLogs()
 
 
         # with ui.footer() as footer:
@@ -71,7 +76,6 @@ class Dashboard:
         # loop = asyncio.get_running_loop()
         # loop.create_task()
 
-        ui.timer(1.0, lambda: self.test())
 
         ui.run(title="Panduza Admin Dashboard")
 
