@@ -49,7 +49,6 @@ class Dashboard:
                 tab = TabSetup()
             with ui.tab_panel(two):
                 t = TabControl()
-            
 
 
         # with ui.footer() as footer:

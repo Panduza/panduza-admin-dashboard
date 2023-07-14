@@ -1,5 +1,7 @@
 from nicegui import ui
 
+import os
+import asyncio
 import subprocess
 
 
@@ -65,21 +67,32 @@ class TabControl:
 
     def __init__(self) -> None:
 
-
         ui.button('Start', on_click=self.start_platform)
 
+        ui.upload(on_upload=self.store_new_tree).props('accept=.json').classes('max-w-full')
 
-    def start_platform(self):
+        with ui.scroll_area():
+            md = ui.html("pppp </br>")
 
-
-
-
-        # # Usage example
-        # service_name = 'panduza-py-platform.service'
-        # logs = get_daemon_logs(service_name)
-        # print(logs)
+        for i in range (1,300):
+            md.content += "<b>pok</b></br>"
 
 
+    async def store_new_tree(self, e):
+        print(f"pok !! {e.name}")
+
+        text = e.content.read().decode('utf-8')
+        print(text)
+
+        filename="/etc/panduza/tree.json"
+        print(f"Write file: {filename}")
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "w") as f:
+            f.write(text)
+
+
+
+    async def start_platform(self):
 
         # cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]        
         # text = execute_sys_cmd(cmd)
@@ -97,12 +110,19 @@ class TabControl:
         text = execute_sys_cmd(cmd)
         print(text)
 
-        print("==================")
+        # print("==================")
+
+        # await asyncio.sleep(2)
 
         # cmd = ['systemctl', 'status', "panduza-py-platform.service"]        
         # text = execute_sys_cmd(cmd)
         # print(text)
 
+
+        # # Usage example
+        # service_name = 'panduza-py-platform.service'
+        # logs = get_daemon_logs(service_name)
+        # print(logs)
 
 
         # execute_sys_cmd(cmd, ui_log_area)

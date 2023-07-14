@@ -34,7 +34,6 @@ def execute_sys_cmd(cmd, ui_log_area):
                 ui_log_area.push(f"\t{output}")
             else:
                 data_available = False
-        
 
         data_available = True
         while data_available:
@@ -44,7 +43,7 @@ def execute_sys_cmd(cmd, ui_log_area):
                 ui_log_area.push(f"\t{error}")
             else:
                 data_available = False
-                
+
     ui_log_area.push("---")
 
     return text
