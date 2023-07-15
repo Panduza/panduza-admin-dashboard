@@ -38,8 +38,8 @@ class TabPlatformLogs:
         logs = get_daemon_logs(service_name)
 
 
-        with ui.scroll_area() as scroll_area:
-            md = ui.html()
+        # with ui.scroll_area() as scroll_area:
+        md = ui.html()
             # scroll_area.classes("fit")
 
         for line in logs.splitlines():

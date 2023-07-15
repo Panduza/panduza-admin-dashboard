@@ -27,14 +27,20 @@ class Dashboard:
         # HEADER
         with ui.header().classes() as header:
 
-            with ui.splitter(horizontal=False, reverse=False, value=60, on_change=lambda e: ui.notify(e.value)).classes("w-full") as splitter:
 
-                with splitter.before:
-                    ui.button(on_click = lambda: self.ui_left_drawer.toggle()).props('flat color=white icon=menu')
-                    ui.label("Test dashboard")
+            with ui.element('div').classes('flex w-full'):
 
-                with splitter.after:
-                    ButtonStartStop()
+            # with ui.splitter(horizontal=False, reverse=False, value=60, on_change=lambda e: ui.notify(e.value)).classes("w-full") as splitter:
+
+
+                ui.button(on_click = lambda: self.ui_left_drawer.toggle()).props('flat color=white icon=menu')
+                ui.label("Test dashboard")
+
+
+                ui.element('div').classes('grow')
+
+
+                ButtonStartStop()
 
         # 
         with ui.left_drawer() as left_drawer:
