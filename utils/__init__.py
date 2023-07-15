@@ -46,3 +46,10 @@ def execute_sys_cmd(cmd, ui_log_area=None):
 
 
 
+
+def get_service_activation_status():
+    """
+    """
+    cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
+    status = execute_sys_cmd(cmd)
+    return status

@@ -60,14 +60,17 @@ class StepSetupPanduza:
             "PyHamcrest==2.0.4",
         ]
 
-        for r in reqs:       
+        for r in reqs:
             cmd = ['pip', 'install', r]
             execute_sys_cmd(cmd, ui_log_area)
 
         cmd = ['pip', 'install', "git+https://github.com/Panduza/panduza-py.git@pico_dio_integration#egg=panduza_platform&subdirectory=platform/", "--no-color"]
         execute_sys_cmd(cmd, ui_log_area)
 
-        
+        cmd = ['pip', 'install', "git+https://github.com/Panduza/panduza-py.git@pico_dio_integration#egg=panduza&subdirectory=client/", "--no-color"]
+        execute_sys_cmd(cmd, ui_log_area)
+
+
         filename="/usr/local/bin/pza-py-platform-run.py"
         ui_log_area.push(f"Write file: {filename}")
         os.makedirs(os.path.dirname(filename), exist_ok=True)

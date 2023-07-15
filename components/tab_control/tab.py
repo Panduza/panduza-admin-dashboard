@@ -67,15 +67,8 @@ class TabControl:
 
     def __init__(self) -> None:
 
-        ui.button('Start', on_click=self.start_platform)
-
         ui.upload(on_upload=self.store_new_tree).props('accept=.json').classes('max-w-full')
 
-        with ui.scroll_area():
-            md = ui.html("pppp </br>")
-
-        for i in range (1,300):
-            md.content += "<b>pok</b></br>"
 
 
     async def store_new_tree(self, e):
