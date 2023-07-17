@@ -1,3 +1,0 @@
-
-from .tab import TabControl
-

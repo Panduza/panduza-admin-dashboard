@@ -16,7 +16,7 @@ class ButtonStartStop:
 
         self.ui_button = ui.button(text="start", on_click=self.action)
 
-        with ui.element('div').classes('flex mx-8 p-4') as status:
+        with ui.element('div').classes('flex mx-4 p-4') as status:
             self.ui_status = status
             self.ui_label = ui.label('inside a colored div')
 
