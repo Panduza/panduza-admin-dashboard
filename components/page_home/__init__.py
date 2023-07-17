@@ -9,7 +9,7 @@ def create():
     def page_home() -> None:
         pass
         # ui.label(f'Hello {app.storage.user["username"]}!').classes('text-2xl')
-        
+
         # if not app.storage.user.get('authenticated', False):
         return RedirectResponse('/control')
         # with ui.column().classes('absolute-center items-center'):

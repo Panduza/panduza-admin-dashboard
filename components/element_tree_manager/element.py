@@ -1,5 +1,6 @@
 from nicegui import ui
 
+from components.element_tree_editor import ElementTreeEditor
 from components.element_tree_library import ElementTreeLibrary
 
 
@@ -12,22 +13,14 @@ class ElementTreeManager:
         with ui.element('div').classes('flex w-full'):
 
             with ui.element('div').classes(''):
-                ElementTreeLibrary()
+                self.library = ElementTreeLibrary(on_tree_change=self.on_tree_change)
 
             with ui.element('div').classes(''):
-                ui.label('Tree')        
-                self.data = [
-                    {'id': 'device', 'label': "pokkkk", 'children': [{'id': '1'}, {'id': '2'}]},
-                    {'id': 'letters', 'label': "pweshk", 'children': [{'id': 'A'}, {'id': 'B'}]},
-                ]
-                self.ui_tree = ui.tree(
-                    self.data, on_select=self.select)
+                self.editor = ElementTreeEditor()
 
 
-                self.ui_button = ui.button(text="start", on_click=self.up)
-
-
-
+    def on_tree_change(self, tree_name):
+        self.editor.use_tree(tree_name)
 
 
     async def store_new_tree(self, e):
@@ -44,8 +37,6 @@ class ElementTreeManager:
 
 
 
-    def select(self, e):
-        print(e)
 
     def up(self):
         self.data[0]['children'].append({'id': 'new_dev'})

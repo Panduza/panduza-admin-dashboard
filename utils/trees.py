@@ -6,10 +6,12 @@ TREE_ACTIVE_PATH="/etc/panduza/tree.json"
 
 
 class TreeFile:
-    
+
     def __init__(self, name) -> None:
+        self.name = name
         self.filepath = os.path.join(TREE_LIBRARY_DIR_PATH, f"{name}.json" )
         self.content = ""
+        self.obj = { "devices": [] }
 
     def set_content(self, content):
         self.content = content
@@ -21,6 +23,17 @@ class TreeFile:
     def activate(self):
         self.save()
         shutil.copyfile(self.filepath, TREE_ACTIVE_PATH)
+
+
+    def get_devices(self):
+        return self.obj["devices"]
+
+
+    def append_device(self):
+        new_device = {
+            "model": ""
+        }
+        self.obj["devices"].append(new_device)
 
 
 
