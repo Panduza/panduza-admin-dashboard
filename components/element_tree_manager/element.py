@@ -1,5 +1,6 @@
 from nicegui import ui
 
+from components.element_tree_library import ElementTreeLibrary
 
 
 class ElementTreeManager:
@@ -11,19 +12,7 @@ class ElementTreeManager:
         with ui.element('div').classes('flex w-full'):
 
             with ui.element('div').classes(''):
-                ui.upload(on_upload=self.store_new_tree).props('accept=.json').classes('max-w-full')
-    
-                columns = [
-                    {'name': 'name', 'label': 'Name', 'field': 'name', 'required': True, 'align': 'left'},
-                    {'name': 'age', 'label': 'Age', 'field': 'age', 'sortable': True},
-                ]
-                rows = [
-                    {'name': 'Alice', 'age': 18},
-                    {'name': 'Bob', 'age': 21},
-                    {'name': 'Carol'},
-                ]
-                ui.table(columns=columns, rows=rows, row_key='name')
-
+                ElementTreeLibrary()
 
             with ui.element('div').classes(''):
                 ui.label('Tree')        
