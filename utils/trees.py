@@ -9,6 +9,7 @@ class TreeFile:
     
     def __init__(self, name) -> None:
         self.filepath = os.path.join(TREE_LIBRARY_DIR_PATH, f"{name}.json" )
+        self.content = ""
 
     def set_content(self, content):
         self.content = content
@@ -36,20 +37,24 @@ class TreeLibrary:
         if not isExist:
             os.makedirs(TREE_LIBRARY_DIR_PATH)
 
-
+        # 
         results = []
         for file in os.listdir(TREE_LIBRARY_DIR_PATH):
+            print("!!!!", file)
             if file.endswith(".json"):
-                results.append(file[:len(".json")])
+                results.append(file[:-len(".json")])
         return results
 
-    def name_already_exists(name):
+    # ---
+
+    def tree_name_exists(name):
         existing_trees = TreeLibrary.get_list()
         for t in existing_trees:
             if name == t:
                 return True
         return False
 
+    # ---
 
     def create_new_tree():
         """
@@ -57,10 +62,12 @@ class TreeLibrary:
         
         # Get a unique new name
         i = 0
-        new_name = f"new_tree_{i}.json"
-        while TreeLibrary.name_already_exists(new_name):
+        new_name = f"new_tree_{i}"
+        while TreeLibrary.tree_name_exists(new_name):
             i+=1
-            new_name = f"new_tree_{i}.json"
+            new_name = f"new_tree_{i}"
+
+        print(">>> ", new_name)
 
 
         new_tree = TreeFile(new_name)
