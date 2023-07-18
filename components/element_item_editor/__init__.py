@@ -25,8 +25,8 @@ class ElementItemEditor:
 
     def load_item_dev(self, item):
         
-        self.ui_title = ui.label(str(item))
-        self.ui_title.move(self.container)
+        # self.ui_title = ui.label(str(item))
+        # self.ui_title.move(self.container)
 
         with self.container:
             ItemDeviceEditor(item)

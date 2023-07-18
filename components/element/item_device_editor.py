@@ -11,17 +11,19 @@ class ItemDeviceEditor:
     def __init__(self, item) -> None:
         self.item = item
 
-        self.container = ui.element('div').classes('m-4')
+        with ui.element('div').classes('m-4') as self.container:
+            with ui.card().tight():
+                ui.image('images/hm310t.jpg')
+                with ui.element('div').classes('p-4'):
+                    ui.input(label='Name', 
+                                placeholder='device_name',
+                                value=self.item.name,
+                                on_change=self.change_name,
+                                validation={'Input too long': lambda value: len(value) < 20})
 
-        with self.container:
-            ui.input(label='Name', 
-                     placeholder='device_name',
-                     value=self.item.name,
-                     on_change=self.change_name,
-                     validation={'Input too long': lambda value: len(value) < 20})
-
-            choices = ["Hanmatek.Hm310t", "Panduza.FakePsu", "Panduza.FakeDioController"]
-            select1 = ui.select(choices, value=self.item.model, on_change=self.change_model)
+                    choices = ["Hanmatek.Hm310t", "Panduza.FakePsu", "Panduza.FakeDioController"]
+                    ui.select(choices, value=self.item.model, on_change=self.change_model)
+            
 
     # ---
 
@@ -35,4 +37,5 @@ class ItemDeviceEditor:
         self.item.model = e.value
         self.item.notify()
 
+    # ---
 
