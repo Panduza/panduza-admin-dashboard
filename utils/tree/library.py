@@ -40,7 +40,7 @@ class TreeLibrary:
     def create_new_tree():
         """
         """
-        
+
         # Get a unique new name
         i = 0
         new_name = f"new_tree_{i}"

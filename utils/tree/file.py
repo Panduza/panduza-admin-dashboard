@@ -32,6 +32,7 @@ class TreeFile:
         """
         devices = self.content.get('devices')
         for dev in devices:
+            self.devices.clear()
             new_device = self.create_device()
             new_device.from_dict(dev)
 
@@ -40,9 +41,13 @@ class TreeFile:
     def load_from_file(self):
         """file => content
         """
-        with open(self.filepath, 'r') as f:
-            self.content = json.load(f)
-        self.load_from_content()
+        try:
+            with open(self.filepath, 'r') as f:
+                self.content = json.load(f)
+            self.load_from_content()
+        except json.JSONDecodeError as e:
+            self.content = ""
+
 
     # ---
 

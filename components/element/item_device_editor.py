@@ -17,18 +17,22 @@ class ItemDeviceEditor:
             ui.input(label='Name', 
                      placeholder='device_name',
                      value=self.item.name,
-                     on_change=self.on_name_update,
+                     on_change=self.change_name,
                      validation={'Input too long': lambda value: len(value) < 20})
 
-            select1 = ui.select(["Hanmatek.Hm310t", "Panduza.FakePsu", "Panduza.FakeDioController"], value=1)
+            choices = ["Hanmatek.Hm310t", "Panduza.FakePsu", "Panduza.FakeDioController"]
+            select1 = ui.select(choices, value=self.item.model, on_change=self.change_model)
 
     # ---
 
-    def on_name_update(self, e):
+    def change_name(self, e):
         self.item.name = e.value
         self.item.notify()
+    # ---
 
-
-
+    def change_model(self, e):
+        print(e.value)
+        self.item.model = e.value
+        self.item.notify()
 
 

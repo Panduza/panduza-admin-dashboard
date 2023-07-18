@@ -35,9 +35,11 @@ class TreeEditor:
 
     def save_tree(self, item):
         print("okkkk save !!!")
-        
+
+        # Save the tree file and update ui
         if self.current_tree:
             self.current_tree.save_to_file()
+            self.update_tree_data()
 
 
     def select(self, e):
