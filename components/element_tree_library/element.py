@@ -1,7 +1,7 @@
 
 from nicegui import ui
 
-from utils.trees import TreeLibrary
+from utils.tree import TreeLibrary
 
 
 class ElementTreeLibrary:

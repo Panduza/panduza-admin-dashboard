@@ -1,19 +1,21 @@
 from nicegui import ui
 
-from utils.trees import TreeFile
-from utils.trees import TreeLibrary
+from utils.tree import TreeFile
+from utils.tree import TreeLibrary
 
 
 
 class ElementTreeEditor:
 
-    def __init__(self, on_item_clicked=None) -> None:
+    def __init__(self, on_item_dev_selected=None) -> None:
 
         self.current_tree = None
-        self.on_item_clicked = on_item_clicked
+        self.on_item_dev_selected = on_item_dev_selected
 
         self.data = [
-            {'id': 'device', 'label': 'devices', 'children': []},
+            {'id': 'section_devices', 'label': 'devices', 'children': []},
+            {'id': 'section_benches', 'label': 'benches', 'children': []},
+            {'id': 'section_brokers', 'label': 'brokers', 'children': []},
         ]
 
         ui.button("New Device", on_click=self.append_device)
@@ -32,8 +34,13 @@ class ElementTreeEditor:
     def select(self, e):
         print("edit device", e)
         
-        # if self.on_item_clicked:
-        #     self.on_item_clicked(e.)
+        obj_idx = e.value
+
+        if obj_idx.startswith("dev_"):
+            print("dev !!")
+
+            if self.on_item_dev_selected:
+                self.on_item_dev_selected(self.current_tree.get_device(obj_idx))
 
 
     def append_device(self):
@@ -47,8 +54,8 @@ class ElementTreeEditor:
 
             for dev in self.devices:
                 self.data[0]['children'].append({
-                    'id': '0001',
-                    'label': "unamed",
+                    'id': dev['idx'],
+                    'label': dev.get('name', ''),
                 })
 
             self.ui_tree.update()

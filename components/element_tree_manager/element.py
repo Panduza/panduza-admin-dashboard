@@ -15,15 +15,22 @@ class ElementTreeManager:
                 self.library = ElementTreeLibrary(on_tree_change=self.on_tree_change)
 
             with ui.element('div').classes('m-4'):
-                self.tree_editor = ElementTreeEditor()
+                self.tree_editor = ElementTreeEditor(on_item_dev_selected=self.on_item_dev_selected)
 
             with ui.element('div').classes('m-4'):
                 self.item_editor = ElementItemEditor()
 
+    # ---
 
     def on_tree_change(self, tree_name):
         self.tree_editor.use_tree(tree_name)
 
+    # ---
+
+    def on_item_dev_selected(self, item_dev):
+        self.item_editor.load_item_dev(item_dev)
+
+    # ---
 
     async def store_new_tree(self, e):
         print(f"pok !! {e.name}")
