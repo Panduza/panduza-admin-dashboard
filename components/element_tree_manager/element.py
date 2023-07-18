@@ -1,6 +1,6 @@
 from nicegui import ui
 
-from components.element_tree_editor import ElementTreeEditor
+from components.element import TreeEditor
 from components.element_tree_library import ElementTreeLibrary
 from components.element_item_editor import ElementItemEditor
 
@@ -15,7 +15,7 @@ class ElementTreeManager:
                 self.library = ElementTreeLibrary(on_tree_change=self.on_tree_change)
 
             with ui.element('div').classes('m-4'):
-                self.tree_editor = ElementTreeEditor(on_item_dev_selected=self.on_item_dev_selected)
+                self.tree_editor = TreeEditor(on_item_dev_selected=self.on_item_dev_selected)
 
             with ui.element('div').classes('m-4'):
                 self.item_editor = ElementItemEditor()

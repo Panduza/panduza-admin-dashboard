@@ -3,7 +3,7 @@ from nicegui import ui
 from utils.tree import TreeFile
 from utils.tree import TreeLibrary
 
-from components.element_item_device_editor import ElementItemDeviceEditor
+from components.element.item_device_editor import ItemDeviceEditor
 
 
 class ElementItemEditor:
@@ -16,7 +16,7 @@ class ElementItemEditor:
         #     {'id': 'device', 'label': 'devices', 'children': []},
         # ]
 
-        # ui.button("New Device", on_click=self.append_device)
+        # ui.button("New Device", on_click=self.create_device)
 
         self.container = ui.element('div').classes('m-4')
 
@@ -24,12 +24,12 @@ class ElementItemEditor:
 
 
     def load_item_dev(self, item):
-        print(item)
+        
         self.ui_title = ui.label(str(item))
         self.ui_title.move(self.container)
 
         with self.container:
-            ElementItemDeviceEditor(item)
+            ItemDeviceEditor(item)
 
 
 
