@@ -7,9 +7,10 @@ from utils.trees import TreeLibrary
 
 class ElementTreeEditor:
 
-    def __init__(self) -> None:
+    def __init__(self, on_item_clicked=None) -> None:
 
         self.current_tree = None
+        self.on_item_clicked = on_item_clicked
 
         self.data = [
             {'id': 'device', 'label': 'devices', 'children': []},
@@ -21,7 +22,6 @@ class ElementTreeEditor:
         self.ui_tree = ui.tree(self.data, on_select=self.select)
 
 
-
     def use_tree(self, name):
         # print("poook ", name)
         # 
@@ -31,6 +31,9 @@ class ElementTreeEditor:
 
     def select(self, e):
         print("edit device", e)
+        
+        # if self.on_item_clicked:
+        #     self.on_item_clicked(e.)
 
 
     def append_device(self):

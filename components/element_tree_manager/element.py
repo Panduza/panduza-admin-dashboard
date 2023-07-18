@@ -2,25 +2,27 @@ from nicegui import ui
 
 from components.element_tree_editor import ElementTreeEditor
 from components.element_tree_library import ElementTreeLibrary
-
+from components.element_item_editor import ElementItemEditor
 
 class ElementTreeManager:
 
 
     def __init__(self) -> None:
-        
 
         with ui.element('div').classes('flex w-full'):
 
-            with ui.element('div').classes(''):
+            with ui.element('div').classes('m-4'):
                 self.library = ElementTreeLibrary(on_tree_change=self.on_tree_change)
 
-            with ui.element('div').classes(''):
-                self.editor = ElementTreeEditor()
+            with ui.element('div').classes('m-4'):
+                self.tree_editor = ElementTreeEditor()
+
+            with ui.element('div').classes('m-4'):
+                self.item_editor = ElementItemEditor()
 
 
     def on_tree_change(self, tree_name):
-        self.editor.use_tree(tree_name)
+        self.tree_editor.use_tree(tree_name)
 
 
     async def store_new_tree(self, e):
