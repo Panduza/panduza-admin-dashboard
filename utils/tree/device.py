@@ -22,12 +22,15 @@ class TreeDevice:
             cb(self)
 
     def to_dict(self):
-        return {
+        tmp = {
             "name": self.name,
             "model": self.model
         }
+        tmp["settings"] = self.settings
+        return tmp
 
     def from_dict(self, dict_obj):
-        self.name = dict_obj["name"]
-        self.model = dict_obj["model"]
+        self.name = dict_obj.get("name", "")
+        self.model = dict_obj.get("model", "")
+        self.settings = dict_obj.get("settings", {})
 

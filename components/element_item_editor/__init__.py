@@ -18,7 +18,7 @@ class ElementItemEditor:
 
         # ui.button("New Device", on_click=self.create_device)
 
-        self.container = ui.element('div').classes('m-4')
+        self.container = ui.element('div').classes('min-w-full max-w-xl')
 
         # self.ui_tree = ui.tree(self.data, on_select=self.select)
 
@@ -28,6 +28,7 @@ class ElementItemEditor:
         # self.ui_title = ui.label(str(item))
         # self.ui_title.move(self.container)
 
+        self.container.clear()
         with self.container:
             ItemDeviceEditor(item)
 

@@ -33,7 +33,7 @@ class TreeEditor:
         self.update_tree_data()
 
 
-    def save_tree(self, item):
+    def save_tree(self, item = None):
         print("okkkk save !!!")
 
         # Save the tree file and update ui
@@ -63,7 +63,7 @@ class TreeEditor:
 
         if self.current_tree:
             self.current_tree.create_device()
-
+            self.save_tree()
             self.update_tree_data()
 
 

@@ -9,7 +9,7 @@ class ElementTreeManager:
 
     def __init__(self) -> None:
 
-        with ui.element('div').classes('flex w-full'):
+        with ui.element('div').classes('flex flex-nowrap w-full'):
 
             with ui.element('div').classes('m-4'):
                 self.library = ElementTreeLibrary(on_tree_change=self.on_tree_change)
@@ -17,7 +17,7 @@ class ElementTreeManager:
             with ui.element('div').classes('m-4'):
                 self.tree_editor = TreeEditor(on_item_dev_selected=self.on_item_dev_selected)
 
-            with ui.element('div').classes('m-4'):
+            with ui.element('div').classes('max-w-md'):
                 self.item_editor = ElementItemEditor()
 
     # ---

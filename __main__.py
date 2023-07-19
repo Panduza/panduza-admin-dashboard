@@ -5,6 +5,9 @@ import components.page_install as PageInstall
 import components.page_control as PageControl
 
 
+app.add_static_files("/images", "images")
+
+
 PageHome.create()
 PageInstall.create()
 PageControl.create()

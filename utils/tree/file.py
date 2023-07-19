@@ -31,8 +31,9 @@ class TreeFile:
         """content => obj
         """
         devices = self.content.get('devices')
+        # print("looaddd devviii", devices)
+        self.devices.clear()
         for dev in devices:
-            self.devices.clear()
             new_device = self.create_device()
             new_device.from_dict(dev)
 
@@ -44,6 +45,7 @@ class TreeFile:
         try:
             with open(self.filepath, 'r') as f:
                 self.content = json.load(f)
+            # print("looadd ", self.content)
             self.load_from_content()
         except json.JSONDecodeError as e:
             self.content = ""
@@ -93,5 +95,6 @@ class TreeFile:
 
     def create_device(self):
         new_device = TreeDevice(idx=f"dev_{self.counter_device}")
+        self.counter_device += 1
         self.devices.append(new_device)
         return new_device
