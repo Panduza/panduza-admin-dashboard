@@ -8,6 +8,7 @@ class TreeDevice:
         self.idx = idx
         self.name = "new device"
         self.model = ""
+        self.deletion = False
         self.settings = {}
         self._observer_cbs = []
 
@@ -33,4 +34,7 @@ class TreeDevice:
         self.name = dict_obj.get("name", "")
         self.model = dict_obj.get("model", "")
         self.settings = dict_obj.get("settings", {})
+
+    def flag_for_deletion(self):
+        self.deletion = True
 

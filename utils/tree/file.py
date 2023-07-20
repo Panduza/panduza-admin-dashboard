@@ -50,12 +50,19 @@ class TreeFile:
         except json.JSONDecodeError as e:
             self.content = ""
 
+    # ---
+
+    def execute_deletion_requests(self):
+        self.devices = [dev for dev in self.devices if not dev.deletion]
 
     # ---
 
     def save_to_content(self):
         """obj => content
         """
+
+        self.execute_deletion_requests()
+
         tmp = { "devices": [] }
 
         for dev in self.devices:
@@ -98,3 +105,4 @@ class TreeFile:
         self.counter_device += 1
         self.devices.append(new_device)
         return new_device
+

@@ -3,12 +3,12 @@ from nicegui import app, ui
 
 
 from components.tab_platform_logs import TabPlatformLogs
-from components.tab_test import TabTests
+from components.element import InterfaceTester
 
 from components.button_start_stop import ButtonStartStop
 
 
-from components.element_tree_manager import ElementTreeManager
+from components.element import TreeManager
 
 
 class PageControl:
@@ -25,7 +25,7 @@ class PageControl:
                 with ui.tabs().props("horizontal") as tabs:
                         # .classes('w-full')
                     three = ui.tab('Logs')
-                    aaa = ui.tab('Test')
+                    self.tab_test = ui.tab('Test')
                     self.tab_tree = ui.tab('Tree')
 
                 ui.element('div').classes('grow')
@@ -41,10 +41,10 @@ class PageControl:
         
             with ui.tab_panel(three).classes("h-full"):
                 TabPlatformLogs()
-            with ui.tab_panel(aaa):
-                TabTests()
+            with ui.tab_panel(self.tab_test):
+                InterfaceTester()
             with ui.tab_panel(self.tab_tree):
-                ElementTreeManager()
+                TreeManager()
 
         # with ui.footer() as footer:
 

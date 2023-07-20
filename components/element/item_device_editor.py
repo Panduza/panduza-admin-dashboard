@@ -21,9 +21,12 @@ model_database = {
     },
     "Panduza.FakeDioController": {
         "img": "fake_dio.jpg",
-        "settings": {
-
-        }
+        "settings": [
+            {
+                'name': 'number_of_dio',
+                'type': 'int'
+            }
+        ]
     }
 }
 
@@ -49,14 +52,23 @@ class ItemDeviceEditor:
                     
                     self.ui_settings_container = ui.element('div')
 
+                    ui.button("delete", color='red', on_click=self.delete_item).classes('mt-2')
+
 
         self.update_model_specifics()
+
+    # ---
+
+    def delete_item(self):
+        self.item.flag_for_deletion()
+        self.item.notify()
 
     # ---
 
     def change_name(self, e):
         self.item.name = e.value
         self.item.notify()
+
     # ---
 
     def change_model(self, e):

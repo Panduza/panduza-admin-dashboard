@@ -1,6 +1,6 @@
 from nicegui import app, ui
 
-import components.page_home    as PageHome
+import components.page.home    as PageHome
 import components.page_install as PageInstall
 import components.page_control as PageControl
 

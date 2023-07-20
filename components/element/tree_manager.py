@@ -1,10 +1,11 @@
 from nicegui import ui
 
-from components.element import TreeEditor
-from components.element_tree_library import ElementTreeLibrary
-from components.element_item_editor import ElementItemEditor
+from .tree_editor import TreeEditor
+from .item_editor import ElementItemEditor
+from .tree_library import ElementTreeLibrary
 
-class ElementTreeManager:
+
+class TreeManager:
 
 
     def __init__(self) -> None:
