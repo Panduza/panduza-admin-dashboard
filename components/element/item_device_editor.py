@@ -49,7 +49,7 @@ class ItemDeviceEditor:
 
                     choices = ["Hanmatek.Hm310t", "Panduza.FakePsu", "Panduza.FakeDioController"]
                     ui.select(choices, value=self.item.model, on_change=self.change_model)
-                    
+
                     self.ui_settings_container = ui.element('div')
 
                     ui.button("delete", color='red', on_click=self.delete_item).classes('mt-2')
@@ -88,7 +88,7 @@ class ItemDeviceEditor:
     # ---
 
     def update_model_specifics(self):
-        
+
         params = model_database.get(self.item.model, None)
         if params:
             self.ui_image.source = f'images/{params["img"]}'
@@ -98,7 +98,7 @@ class ItemDeviceEditor:
             self.ui_settings_container.clear()
 
             with self.ui_settings_container:
-                
+
                 ui.label("Settings").classes("text-xl mt-2")
 
                 for setting in params["settings"]:

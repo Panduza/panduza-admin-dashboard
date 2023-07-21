@@ -3,6 +3,7 @@ from nicegui import app, ui
 from fastapi.responses import RedirectResponse
 
 from utils.system.checker import get_panduza_version
+from utils.system.checker import get_panduza_platform_version
 
 
 class RequirementsChecker:
@@ -19,7 +20,8 @@ class RequirementsChecker:
                         ui.spinner(size='2em')
 
                     ui.label('Panduza Platform').classes("text-xl")
-                    ui.spinner(size='2em')
+                    with ui.element('div') as self.panduza_platform_div:
+                        ui.spinner(size='2em')
 
                     ui.label('Mosquitto').classes("text-xl")
                     ui.spinner(size='2em')
@@ -27,8 +29,10 @@ class RequirementsChecker:
                     ui.label('Systemd').classes("text-xl")
                     ui.spinner(size='2em')
 
+                ui.button("installation page", on_click=lambda: ui.open("/install"))
 
-        self.timer = ui.timer(1, self.check_panduza)
+
+        self.timer = ui.timer(0.1, self.check_panduza)
 
     # ---
 
@@ -39,6 +43,20 @@ class RequirementsChecker:
         self.panduza_div.clear()
 
         with self.panduza_div:
+            ui.label(str(version))
+
+        self.timer.callback = self.check_panduza_platform
+        self.timer.activate()
+
+    # ---
+
+    def check_panduza_platform(self):
+        self.timer.deactivate()
+
+        version = get_panduza_platform_version()
+        self.panduza_platform_div.clear()
+
+        with self.panduza_platform_div:
             ui.label(str(version))
 
         self.timer.callback = self.next_step_2

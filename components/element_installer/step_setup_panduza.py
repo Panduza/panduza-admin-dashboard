@@ -12,6 +12,8 @@ import sys
 
 
 from .step_system_control import execute_sys_cmd
+from utils.system.installer import install_mosquitto
+
 
 class StepSetupPanduza:
 
@@ -69,6 +71,9 @@ class StepSetupPanduza:
 
         cmd = ['pip', 'install', "git+https://github.com/Panduza/panduza-py.git@pico_dio_integration#egg=panduza&subdirectory=client/", "--no-color"]
         execute_sys_cmd(cmd, ui_log_area)
+
+
+        # install_mosquitto(, ui_log_area)
 
 
         filename="/usr/local/bin/pza-py-platform-run.py"

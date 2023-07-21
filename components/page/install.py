@@ -6,5 +6,6 @@ def create():
     """
     @ui.page('/install')
     def page_install() -> None:
-        ElementInstaller()
+        with ui.element('div').classes('flex flex-nowrap w-full place-content-center'):
+            ElementInstaller()
 
