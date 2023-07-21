@@ -14,6 +14,10 @@ import sys
 from .step_system_control import execute_sys_cmd
 from utils.system.installer import install_mosquitto
 
+from utils.system.checker import get_osv
+from utils.system.checker import get_panduza_version
+from utils.system.checker import get_panduza_platform_version
+
 
 class StepSetupPanduza:
 
@@ -36,8 +40,8 @@ class StepSetupPanduza:
 
     def worker(self, ui_log_area):
 
-        # Check distribution
-        ui_log_area.push("Check that platform is installed")
+        OSV = get_osv()
+        
 
 
 
@@ -73,7 +77,7 @@ class StepSetupPanduza:
         execute_sys_cmd(cmd, ui_log_area)
 
 
-        # install_mosquitto(, ui_log_area)
+        install_mosquitto(OSV, ui_log_area)
 
 
         filename="/usr/local/bin/pza-py-platform-run.py"

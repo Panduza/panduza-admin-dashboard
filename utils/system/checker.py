@@ -18,9 +18,16 @@ def is_panduza_installed():
 
 # ---
 
+CACHE_OSV = None
 def get_osv(ui_log_area = None):
     """
     """
+    # Use cache if exists
+    global CACHE_OSV
+    if CACHE_OSV:
+        return CACHE_OSV
+
+    # 
     osv = None
     os = None
     version = None
@@ -51,9 +58,12 @@ def get_osv(ui_log_area = None):
             ui_log_area.push(version)
 
     # 
-    osv = f'{os}_{version}'
+    osv = f'{os.rstrip()}_{version.rstrip()}'
     if ui_log_area:
         ui_log_area.push(osv)
+
+    # Set cache and return
+    CACHE_OSV = osv
     return osv
 
 # ---

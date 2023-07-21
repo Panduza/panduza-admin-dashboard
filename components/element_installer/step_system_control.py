@@ -10,6 +10,8 @@ import platform
 
 
 
+from utils.system.checker import get_osv
+
 
 def execute_sys_cmd(cmd, ui_log_area):
 
@@ -75,29 +77,7 @@ class StepSystemControl:
 
     def worker(self, ui_log_area):
 
-        # Check distribution
-        ui_log_area.push("Check Distribution")
-        cmd = ["lsb_release", "-i"]
-        text = execute_sys_cmd(cmd, ui_log_area)
-        if text.startswith("Distributor ID:"):
-            os = text[len("Distributor ID:\t"):]
-            ui_log_area.push(os)
-
-            if os != "Ubuntu":
-                ui_log_area.push("not supported yet")
-                return False
-
-        # Check os
-        ui_log_area.push("Check Release")
-        cmd = ["lsb_release", "-r"]
-        text = execute_sys_cmd(cmd, ui_log_area)
-        if text.startswith("Release:"):
-            release = text[len("Release:\t"):]
-            ui_log_area.push(release)
-
-            if release != "22.04":
-                ui_log_area.push("not supported yet")
-                return False
+        get_osv(ui_log_area)
 
         return True
 
@@ -106,13 +86,13 @@ class StepSystemControl:
     async def start_worker(self):
 
         # Create a log area
-        ui_og = ui.log().classes('w-full h-96')
-        ui_og.move(self.ui_step)
+        ui_log = ui.log().classes('w-full h-96')
+        ui_log.move(self.ui_step)
 
         # Run the worker
         success = False
         with concurrent.futures.ThreadPoolExecutor() as executor:
-            future = executor.submit(self.worker, ui_og)
+            future = executor.submit(self.worker, ui_log)
             while not future.done():
                 await asyncio.sleep(0.5)
             success = future.result()
