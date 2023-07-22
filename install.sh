@@ -8,6 +8,9 @@ ve=`echo $ve | cut -c10-`
 osv=`echo ${id}_${ve}`
 echo "OS: [$osv]"
 
+# PARAMETERS
+python_venv_path=/usr/local/bin/panduza/venv
+
 # 
 function install_systemctl_sudo_permissions() {
     echo "%LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service" > /etc/sudoers.d/panduza
@@ -28,7 +31,6 @@ fi
 # --------------------------
 
 if [[ $id == "Ubuntu" ]]; then
-    # Prompt the user for input
     echo "Exact version of $id not managed !"
     echo "Do you want to try installation with a generic process ? (y/n)"
     read input
@@ -36,7 +38,6 @@ if [[ $id == "Ubuntu" ]]; then
         echo "Quitting..."
         exit 1
     fi
-
     apt-get install -y python3 python3-pip
     pip install nicegui==1.3.1
     install_systemctl_sudo_permissions
@@ -50,7 +51,8 @@ fi
 if [[ $osv == "ManjaroLinux_23.0.0" ]]; then
     pacman -S python --noconfirm
     pacman -S python-pip --noconfirm
-    pip install nicegui==1.3.1
+    python3 -m venv ${python_venv_path}
+    ${python_venv_path}/bin/pip install nicegui==1.3.1
     install_systemctl_sudo_permissions
     exit 0
 fi
@@ -60,7 +62,6 @@ fi
 # --------------------------
 
 if [[ $id == "ManjaroLinux" ]]; then
-    # Prompt the user for input
     echo "Exact version of $id not managed !"
     echo "Do you want to try installation with a generic process ? (y/n)"
     read input
@@ -68,10 +69,10 @@ if [[ $id == "ManjaroLinux" ]]; then
         echo "Quitting..."
         exit 1
     fi
-
     pacman -S python --noconfirm
     pacman -S python-pip --noconfirm
-    pip install nicegui==1.3.1
+    python3 -m venv ${python_venv_path}
+    ${python_venv_path}/bin/pip install nicegui==1.3.1
     install_systemctl_sudo_permissions
     exit 0
 fi
