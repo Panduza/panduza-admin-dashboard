@@ -12,4 +12,6 @@ sudo visudo -f /etc/sudoers.d/panduza
 %LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service
 
 
-reboot
+```bash
+wget -O - https://raw.githubusercontent.com/Panduza/panduza-admin-dashboard/main/install.sh | bash
+```
