@@ -1,27 +1,84 @@
 #!/bin/bash
 
+# Get system
 id=`lsb_release -i`
 id=`echo $id | cut -c17-`
-
 ve=`lsb_release -r`
 ve=`echo $ve | cut -c10-`
-
 osv=`echo ${id}_${ve}`
-
 echo "OS: [$osv]"
+
+# 
+function install_systemctl_sudo_permissions() {
+    echo "%LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service" > /etc/sudoers.d/panduza
+}
 
 # --------------------------
 # Ubuntu_22.04
 # --------------------------
 
 if [[ $osv == "Ubuntu_22.04" ]]; then
-
-pip install nicegui==1.3.1
-
-echo "%LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service" > /etc/sudoers.d/panduza
-
+    pip install nicegui==1.3.1
+    install_systemctl_sudo_permissions
+    exit 0
 fi
 
+# --------------------------
+# Ubuntu generic way... not garanted!
+# --------------------------
+
+if [[ $id == "Ubuntu" ]]; then
+    # Prompt the user for input
+    echo "Exact version of $id not managed !"
+    echo "Do you want to try installation with a generic process ? (y/n)"
+    read input
+    if [[ $input == "n" ]]; then
+        echo "Quitting..."
+        exit 1
+    fi
+
+    apt-get install -y python3 python3-pip
+    pip install nicegui==1.3.1
+    install_systemctl_sudo_permissions
+    exit 0
+fi
+
+# --------------------------
+# ManjaroLinux_23.0.0
+# --------------------------
+
+if [[ $osv == "ManjaroLinux_23.0.0" ]]; then
+    pacman -S python --noconfirm
+    pacman -S python-pip --noconfirm
+    pip install nicegui==1.3.1
+    install_systemctl_sudo_permissions
+    exit 0
+fi
+
+# --------------------------
+# ManjaroLinux generic way... not garanted!
+# --------------------------
+
+if [[ $id == "ManjaroLinux" ]]; then
+    # Prompt the user for input
+    echo "Exact version of $id not managed !"
+    echo "Do you want to try installation with a generic process ? (y/n)"
+    read input
+    if [[ $input == "n" ]]; then
+        echo "Quitting..."
+        exit 1
+    fi
+
+    pacman -S python --noconfirm
+    pacman -S python-pip --noconfirm
+    pip install nicegui==1.3.1
+    install_systemctl_sudo_permissions
+    exit 0
+fi
+
+
+
+echo "OS NOT SUPPORTED"
 
 
 
