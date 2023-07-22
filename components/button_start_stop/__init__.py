@@ -3,6 +3,7 @@ from nicegui import ui
 
 from utils import execute_sys_cmd
 from utils import get_service_activation_status
+from utils.system.checker import get_service_mosquitto_activation_status
 
 class ButtonStartStop:
     """
@@ -55,15 +56,13 @@ class ButtonStartStop:
             self.ui_status.classes("bg-red-500")
 
         else:
-            print(f"- Service State: {self.service_state}")
+            print(f"- Unknown Service State: '{self.service_state}'")
 
     # ---
 
     def check_service_activation(self):
-        cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
-        text = execute_sys_cmd(cmd)
-        # print(f"- Service State: {self.service_state}")
-        self.change_state(text)
+        new_status = get_service_activation_status()
+        self.change_state(new_status)
 
     # ---
 
@@ -79,6 +78,11 @@ class ButtonStartStop:
 
     def action_start(self):
         # print("---- start")
+
+        if get_service_mosquitto_activation_status() != "active":
+            cmd = ['systemctl', 'start', "mosquitto.service"]
+            text = execute_sys_cmd(cmd)
+
         cmd = ['systemctl', 'start', "panduza-py-platform.service"]
         text = execute_sys_cmd(cmd)
 

@@ -104,4 +104,15 @@ def get_service_activation_status():
     """
     cmd = ['systemctl', 'is-active', "panduza-py-platform.service"]
     status = execute_sys_cmd(cmd)
-    return status
+    return status.strip()
+
+# ---
+
+def get_service_mosquitto_activation_status():
+    """
+    """
+    cmd = ['systemctl', 'is-active', "mosquitto.service"]
+    status = execute_sys_cmd(cmd)
+    return status.strip()
+
+
