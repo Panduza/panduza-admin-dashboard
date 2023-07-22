@@ -5,6 +5,8 @@ from fastapi.responses import RedirectResponse
 from utils.system.checker import get_osv
 from utils.system.checker import get_panduza_version
 from utils.system.checker import get_panduza_platform_version
+from utils.system.checker import get_service_mosquitto_version
+
 
 
 class RequirementsChecker:
@@ -16,7 +18,7 @@ class RequirementsChecker:
                 ui.label('System Requirement Check').classes("text-2xl")
                 ui.separator().classes("mb-4")
                 with ui.grid(columns=2):
-                    
+
                     ui.label('System').classes("text-xl")
                     with ui.element('div') as self.div_system:
                         ui.spinner(size='2em')
@@ -30,12 +32,12 @@ class RequirementsChecker:
                         ui.spinner(size='2em')
 
                     ui.label('Mosquitto').classes("text-xl")
-                    ui.spinner(size='2em')
+                    with ui.element('div') as self.div_mosqutto:
+                        ui.spinner(size='2em')
 
-                    ui.label('Systemd').classes("text-xl")
-                    ui.spinner(size='2em')
 
                 ui.button("installation page", on_click=lambda: ui.open("/install"))
+                ui.button("control", on_click=lambda: ui.open("/control"))
 
 
         self.timer = ui.timer(0.1, self.check_system)
@@ -70,13 +72,22 @@ class RequirementsChecker:
         self.div_panduza_platform.clear()
         with self.div_panduza_platform:
             ui.label(str(version))
-        self.timer.callback = self.next_step_2
+        self.timer.callback = self.check_mosquitto
         self.timer.activate()
 
     # ---
 
-    def next_step_2(self):
-        print("ok 2")
-        # ui.label("oooo 222")
+    def check_mosquitto(self):
+        self.timer.deactivate()
+        version = get_service_mosquitto_version()
+        self.div_mosqutto.clear()
+        with self.div_mosqutto:
+            ui.label(str(version))
+        self.timer.callback = self.final_step
+        self.timer.activate()
+
+    # ---
+
+    def final_step(self):
         self.timer.deactivate()
 

@@ -116,3 +116,22 @@ def get_service_mosquitto_activation_status():
     return status.strip()
 
 
+# ---
+
+def get_service_mosquitto_version():
+    """
+    """
+    # Init
+    x = 'mosquitto version '
+    version = None
+
+    cmd = ['mosquitto', '-h']
+    output = execute_sys_cmd(cmd)
+
+    # Check if the version line exists
+    for line in output.splitlines():
+        if line.startswith(x):
+            version = line[len(x):]
+
+    return version
+
