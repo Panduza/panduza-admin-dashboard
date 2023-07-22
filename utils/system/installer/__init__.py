@@ -12,3 +12,7 @@ def install_mosquitto(osv, ui_log_area=None):
         raise Exception(f"{osv} not supported")
 
 
+
+# Manjaro
+# sudo pacman -Syu mosquitto --noconfirm
+
