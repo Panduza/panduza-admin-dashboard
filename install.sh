@@ -24,12 +24,15 @@ function install_systemctl_sudo_permissions() {
 #
 service_panduza_admin_path=/etc/systemd/system/panduza-admin.service
 function install_systemctl_admin_service() {
+
+    path_to_admin_main=`readlink -e ${python_venv_path}/lib/python3*/site-packages/panduza_admin_dashboard/__main__.py`
+
     echo "[Unit]" > $service_panduza_admin_path
     echo "Description=Platform Python to support Panduza Meta Drivers" >> $service_panduza_admin_path
     echo "After=network.target" >> $service_panduza_admin_path
     echo "[Service]" >> $service_panduza_admin_path
     echo "User=root" >> $service_panduza_admin_path
-    echo "ExecStart=${python_venv_path}/bin/python3 ${python_venv_path}/lib/python3.10/site-packages/panduza_admin_dashboard/__main__.py" >> $service_panduza_admin_path
+    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> $service_panduza_admin_path
     echo "ExecStop=/bin/kill $MAINPID" >> $service_panduza_admin_path
     echo "[Install]" >> $service_panduza_admin_path
     echo "WantedBy=multi-user.target" >> $service_panduza_admin_path
