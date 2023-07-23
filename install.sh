@@ -10,6 +10,8 @@ echo "OS: [$osv]"
 
 # PARAMETERS
 python_venv_path=/usr/local/bin/panduza/venv
+package_panduza_admin_dashboard="git+https://github.com/Panduza/panduza-admin-dashboard"
+
 
 # 
 function install_systemctl_sudo_permissions() {
@@ -17,7 +19,7 @@ function install_systemctl_sudo_permissions() {
 }
 
 # 
-function install_systemctl_admin_service() {
+# function install_systemctl_admin_service() {
 
 # [Unit]
 # Description=Platform Python to support Panduza Meta Drivers
@@ -31,11 +33,9 @@ function install_systemctl_admin_service() {
 # [Install]
 # WantedBy=multi-user.target
 
-}
+# }
 
 
-
-# pip install "git+https://github.com/Panduza/panduza-admin-dashboard"
 
 
 
@@ -44,7 +44,9 @@ function install_systemctl_admin_service() {
 # --------------------------
 
 if [[ $osv == "Ubuntu_22.04" ]]; then
-    pip install nicegui==1.3.1
+    python3 -m venv ${python_venv_path}
+    ${python_venv_path}/bin/pip install nicegui==1.3.1
+    ${python_venv_path}/bin/pip install ${package_panduza_admin_dashboard}
     install_systemctl_sudo_permissions
     exit 0
 fi
