@@ -1,3 +1,5 @@
-from .dashboard import run_admin_dashboard
+from dashboard import run_dashboard
 
-run_admin_dashboard()
+if __name__ in {"__main__", "__mp_main__"}:
+
+    run_dashboard()

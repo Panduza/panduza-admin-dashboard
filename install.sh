@@ -16,6 +16,25 @@ function install_systemctl_sudo_permissions() {
     echo "%LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service" > /etc/sudoers.d/panduza
 }
 
+# 
+function install_systemctl_admin_service() {
+
+# [Unit]
+# Description=Platform Python to support Panduza Meta Drivers
+# After=network.target
+
+# [Service]
+# User=root
+# ExecStart=/usr/bin/python3 /home/xdoctorwhoz/work/panduza-admin-dashboard/__m>
+# ExecStop=/bin/kill $MAINPID
+
+# [Install]
+# WantedBy=multi-user.target
+
+}
+
+
+
 # --------------------------
 # Ubuntu_22.04
 # --------------------------
