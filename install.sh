@@ -12,13 +12,7 @@ echo "OS: [$osv]"
 # PARAMETERS
 python_venv_path=/usr/local/bin/panduza/venv
 
-package_panduza="git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=client/"
-package_panduza_platform="git+https://github.com/Panduza/panduza-py.git@main#egg=panduza_platform&subdirectory=platform/"
 
-# package_panduza_admin_dashboard="git+https://github.com/Panduza/panduza-admin-dashboard"
-package_panduza_admin_dashboard=/home/xdoctorwhoz/work/panduza-admin-dashboard
-
-service_panduza_admin_path=/etc/systemd/system/panduza-admin.service
 
 # ===================================================================
 
@@ -28,6 +22,7 @@ function install_systemctl_sudo_permissions() {
 }
 
 #
+service_panduza_admin_path=/etc/systemd/system/panduza-admin.service
 function install_systemctl_admin_service() {
     echo "[Unit]" > $service_panduza_admin_path
     echo "Description=Platform Python to support Panduza Meta Drivers" >> $service_panduza_admin_path
@@ -40,21 +35,38 @@ function install_systemctl_admin_service() {
     echo "WantedBy=multi-user.target" >> $service_panduza_admin_path
 }
 
+#
+function generic_install() {
+    python3 -m venv ${python_venv_path}
+
+    ${python_venv_path}/bin/pip3 install numpy
+    ${python_venv_path}/bin/pip3 install nicegui==1.3.1
+    ${python_venv_path}/bin/pip3 install aardvark-py==5.40
+    ${python_venv_path}/bin/pip3 install colorama==0.4.6
+    ${python_venv_path}/bin/pip3 install paho-mqtt==1.6.1
+    ${python_venv_path}/bin/pip3 install pyftdi==0.54.0
+    ${python_venv_path}/bin/pip3 install pymodbus==3.3.2
+    ${python_venv_path}/bin/pip3 install pyserial==3.5
+    ${python_venv_path}/bin/pip3 install pyudev==0.24.0
+    ${python_venv_path}/bin/pip3 install pyusb==1.2.1
+    ${python_venv_path}/bin/pip3 install PyHamcrest==2.0.4
+
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=client/"
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza_platform&subdirectory=platform/"
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-admin-dashboard"
+
+    install_systemctl_admin_service
+    install_systemctl_sudo_permissions
+    systemctl daemon-reload
+    systemctl enable panduza-admin.service
+}
+
 # --------------------------
 # Ubuntu_22.04
 # --------------------------
 
 if [[ $osv == "Ubuntu_22.04" ]]; then
-    python3 -m venv ${python_venv_path}
-    ${python_venv_path}/bin/pip install numpy
-    ${python_venv_path}/bin/pip install nicegui==1.3.1
-    ${python_venv_path}/bin/pip install ${package_panduza}
-    ${python_venv_path}/bin/pip install ${package_panduza_platform}
-    ${python_venv_path}/bin/pip install ${package_panduza_admin_dashboard}
-    install_systemctl_admin_service
-    install_systemctl_sudo_permissions
-    systemctl daemon-reload
-    systemctl enable panduza-admin.service
+    generic_install
     exit 0
 fi
 
@@ -63,16 +75,8 @@ fi
 # --------------------------
 
 if [[ $id == "Ubuntu" ]]; then
-    echo "Exact version of $id not managed !"
-    echo "Do you want to try installation with a generic process ? (y/n)"
-    read input
-    if [[ $input == "n" ]]; then
-        echo "Quitting..."
-        exit 1
-    fi
     apt-get install -y python3 python3-pip
-    pip install nicegui==1.3.1
-    install_systemctl_sudo_permissions
+    generic_install
     exit 0
 fi
 
@@ -83,9 +87,7 @@ fi
 if [[ $osv == "ManjaroLinux_23.0.0" ]]; then
     pacman -S python --noconfirm
     pacman -S python-pip --noconfirm
-    python3 -m venv ${python_venv_path}
-    ${python_venv_path}/bin/pip install nicegui==1.3.1
-    install_systemctl_sudo_permissions
+    generic_install
     exit 0
 fi
 
@@ -94,44 +96,12 @@ fi
 # --------------------------
 
 if [[ $id == "ManjaroLinux" ]]; then
-    echo "Exact version of $id not managed !"
-    echo "Do you want to try installation with a generic process ? (y/n)"
-    read input
-    if [[ $input == "n" ]]; then
-        echo "Quitting..."
-        exit 1
-    fi
     pacman -S python --noconfirm
     pacman -S python-pip --noconfirm
-    python3 -m venv ${python_venv_path}
-    ${python_venv_path}/bin/pip install nicegui==1.3.1
-    install_systemctl_sudo_permissions
+    generic_install
     exit 0
 fi
 
 
-
 echo "OS NOT SUPPORTED"
-
-
-
-
-
-#         filename="/etc/systemd/system/panduza-py-platform.service"
-#         ui_log_area.push(f"Write file: {filename}")
-#         os.makedirs(os.path.dirname(filename), exist_ok=True)
-#         with open(filename, "w") as f:
-#             f.write("""
-# [Unit]
-# Description=Platform Python to support Panduza Meta Drivers
-# After=network.target
-
-# [Service]
-# User=root
-# ExecStart=/usr/bin/python3 /usr/local/bin/pza-py-platform-run.py
-
-# [Install]
-# WantedBy=multi-user.target
-#             """)
-
 
