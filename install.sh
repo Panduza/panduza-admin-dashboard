@@ -35,6 +35,10 @@ function install_systemctl_admin_service() {
 
 
 
+# pip install "git+https://github.com/Panduza/panduza-admin-dashboard"
+
+
+
 # --------------------------
 # Ubuntu_22.04
 # --------------------------

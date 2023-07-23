@@ -21,6 +21,8 @@ setup(
     # package_data={"images": ["*.jpg"]},
     include_package_data=True,
 
+    zip_safe=False,
+
     install_requires=[
         'nicegui==1.3.1',
     ],
