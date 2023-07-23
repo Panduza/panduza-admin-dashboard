@@ -8,11 +8,19 @@ ve=`echo $ve | cut -c10-`
 osv=`echo ${id}_${ve}`
 echo "OS: [$osv]"
 
+# ===================================================================
 # PARAMETERS
 python_venv_path=/usr/local/bin/panduza/venv
-package_panduza_admin_dashboard="git+https://github.com/Panduza/panduza-admin-dashboard"
+
+package_panduza="git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=client/"
+package_panduza_platform="git+https://github.com/Panduza/panduza-py.git@main#egg=panduza_platform&subdirectory=platform/"
+
+# package_panduza_admin_dashboard="git+https://github.com/Panduza/panduza-admin-dashboard"
+package_panduza_admin_dashboard=/home/xdoctorwhoz/work/panduza-admin-dashboard
 
 service_panduza_admin_path=/etc/systemd/system/panduza-admin.service
+
+# ===================================================================
 
 # 
 function install_systemctl_sudo_permissions() {
@@ -32,10 +40,6 @@ function install_systemctl_admin_service() {
     echo "WantedBy=multi-user.target" >> $service_panduza_admin_path
 }
 
-
-
-
-
 # --------------------------
 # Ubuntu_22.04
 # --------------------------
@@ -44,10 +48,13 @@ if [[ $osv == "Ubuntu_22.04" ]]; then
     python3 -m venv ${python_venv_path}
     ${python_venv_path}/bin/pip install numpy
     ${python_venv_path}/bin/pip install nicegui==1.3.1
+    ${python_venv_path}/bin/pip install ${package_panduza}
+    ${python_venv_path}/bin/pip install ${package_panduza_platform}
     ${python_venv_path}/bin/pip install ${package_panduza_admin_dashboard}
     install_systemctl_admin_service
     install_systemctl_sudo_permissions
     systemctl daemon-reload
+    systemctl enable panduza-admin.service
     exit 0
 fi
 
