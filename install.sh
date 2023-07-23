@@ -12,28 +12,25 @@ echo "OS: [$osv]"
 python_venv_path=/usr/local/bin/panduza/venv
 package_panduza_admin_dashboard="git+https://github.com/Panduza/panduza-admin-dashboard"
 
+service_panduza_admin_path=/etc/systemd/system/panduza-admin.service
 
 # 
 function install_systemctl_sudo_permissions() {
     echo "%LimitedAdmins ALL=NOPASSWD: /bin/systemctl start panduza-py-platform.service" > /etc/sudoers.d/panduza
 }
 
-# 
-# function install_systemctl_admin_service() {
-
-# [Unit]
-# Description=Platform Python to support Panduza Meta Drivers
-# After=network.target
-
-# [Service]
-# User=root
-# ExecStart=/usr/bin/python3 /home/xdoctorwhoz/work/panduza-admin-dashboard/__m>
-# ExecStop=/bin/kill $MAINPID
-
-# [Install]
-# WantedBy=multi-user.target
-
-# }
+#
+function install_systemctl_admin_service() {
+    echo "[Unit]" > $service_panduza_admin_path
+    echo "Description=Platform Python to support Panduza Meta Drivers" >> $service_panduza_admin_path
+    echo "After=network.target" >> $service_panduza_admin_path
+    echo "[Service]" >> $service_panduza_admin_path
+    echo "User=root" >> $service_panduza_admin_path
+    echo "ExecStart=${python_venv_path}/bin/python3 ${python_venv_path}/lib/python3.10/site-packages/panduza_admin_dashboard/__main__.py" >> $service_panduza_admin_path
+    echo "ExecStop=/bin/kill $MAINPID" >> $service_panduza_admin_path
+    echo "[Install]" >> $service_panduza_admin_path
+    echo "WantedBy=multi-user.target" >> $service_panduza_admin_path
+}
 
 
 
@@ -45,9 +42,12 @@ function install_systemctl_sudo_permissions() {
 
 if [[ $osv == "Ubuntu_22.04" ]]; then
     python3 -m venv ${python_venv_path}
+    ${python_venv_path}/bin/pip install numpy
     ${python_venv_path}/bin/pip install nicegui==1.3.1
     ${python_venv_path}/bin/pip install ${package_panduza_admin_dashboard}
+    install_systemctl_admin_service
     install_systemctl_sudo_permissions
+    systemctl daemon-reload
     exit 0
 fi
 

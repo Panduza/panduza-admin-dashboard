@@ -1,11 +1,10 @@
 import os
-import sys
 
 from nicegui import app, ui
 
-import components.page.home    as PageHome
-import components.page.install as PageInstall
-import components.page_control as PageControl
+import panduza_admin_dashboard.components.page.home    as PageHome
+import panduza_admin_dashboard.components.page.install as PageInstall
+import panduza_admin_dashboard.components.page_control as PageControl
 
 def run_dashboard():
 
