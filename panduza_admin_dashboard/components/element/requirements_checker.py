@@ -8,7 +8,6 @@ from utils.system.checker import get_panduza_platform_version
 from utils.system.checker import get_service_mosquitto_version
 
 
-
 class RequirementsChecker:
 
     def __init__(self) -> None:
@@ -36,7 +35,6 @@ class RequirementsChecker:
                         ui.spinner(size='2em')
 
 
-                ui.button("installation page", on_click=lambda: ui.open("/install"))
                 ui.button("control", on_click=lambda: ui.open("/control"))
 
 

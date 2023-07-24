@@ -44,4 +44,5 @@ def execute_sys_cmd(cmd, ui_log_area=None):
     if ui_log_area:
         ui_log_area.push("---")
 
+
     return text

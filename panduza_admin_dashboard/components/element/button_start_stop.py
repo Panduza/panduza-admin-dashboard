@@ -28,6 +28,10 @@ class ButtonStartStop:
     # ---
 
     def change_state(self, new_state):
+        # Check that new state is different from the current one
+        if new_state == self.service_state:
+            return
+
         self.previous_state = self.service_state
         self.service_state = new_state
         self.update_button()
