@@ -28,15 +28,15 @@ function install_systemctl_admin_service() {
     path_to_admin_main=`readlink -e ${python_venv_path}/lib/python3*/site-packages/panduza_admin_dashboard/__main__.py`
     echo "---> ${path_to_admin_main}"
 
-    echo "[Unit]" > $service_panduza_admin_path
-    echo "Description=Panduza Admin Dashboard" >> $service_panduza_admin_path
-    echo "After=network.target" >> $service_panduza_admin_path
-    echo "[Service]" >> $service_panduza_admin_path
-    echo "User=root" >> $service_panduza_admin_path
-    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> $service_panduza_admin_path
-    echo "ExecStop=/bin/kill $MAINPID" >> $service_panduza_admin_path
-    echo "[Install]" >> $service_panduza_admin_path
-    echo "WantedBy=multi-user.target" >> $service_panduza_admin_path
+    echo "[Unit]" > ${service_panduza_admin_path}
+    echo "Description=Panduza Admin Dashboard" >> ${service_panduza_admin_path}
+    echo "After=network.target" >> ${service_panduza_admin_path}
+    echo "[Service]" >> ${service_panduza_admin_path}
+    echo "User=root" >> ${service_panduza_admin_path}
+    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> ${service_panduza_admin_path}
+    echo "ExecStop=/bin/kill $MAINPID" >> ${service_panduza_admin_path}
+    echo "[Install]" >> ${service_panduza_admin_path}
+    echo "WantedBy=multi-user.target" >> ${service_panduza_admin_path}
 }
 
 #
@@ -46,15 +46,15 @@ function install_systemctl_platform_service() {
     path_to_platform_main=`readlink -e ${python_venv_path}/lib/python3*/site-packages/panduza_platform/__main__.py`
     echo "---> ${path_to_platform_main}"
 
-    echo "[Unit]" > $service_panduza_platform_path
-    echo "Description=Platform Python to support Panduza Meta Drivers" >> $service_panduza_platform_path
-    echo "After=network.target" >> $service_panduza_platform_path
-    echo "[Service]" >> $service_panduza_platform_path
-    echo "User=root" >> $service_panduza_platform_path
-    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> $service_panduza_platform_path
-    echo "ExecStop=/bin/kill $MAINPID" >> $service_panduza_platform_path
-    echo "[Install]" >> $service_panduza_platform_path
-    echo "WantedBy=multi-user.target" >> $service_panduza_platform_path
+    echo "[Unit]" > ${service_panduza_platform_path}
+    echo "Description=Platform Python to support Panduza Meta Drivers" >> ${service_panduza_platform_path}
+    echo "After=network.target" >> ${service_panduza_platform_path}
+    echo "[Service]" >> ${service_panduza_platform_path}
+    echo "User=root" >> ${service_panduza_platform_path}
+    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> ${service_panduza_platform_path}
+    echo "ExecStop=/bin/kill $MAINPID" >> ${service_panduza_platform_path}
+    echo "[Install]" >> ${service_panduza_platform_path}
+    echo "WantedBy=multi-user.target" >> ${service_panduza_platform_path}
 }
 
 #
@@ -64,7 +64,6 @@ function generic_install() {
     python3 -m venv ${python_venv_path}
 
     mkdir -p /etc/panduza/
-    cp -rv etc_panduza/* /etc/panduza/
 
     ${python_venv_path}/bin/pip3 install numpy
     ${python_venv_path}/bin/pip3 install nicegui==1.3.1
