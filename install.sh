@@ -26,9 +26,10 @@ service_panduza_admin_path=/etc/systemd/system/panduza-admin.service
 function install_systemctl_admin_service() {
 
     path_to_admin_main=`readlink -e ${python_venv_path}/lib/python3*/site-packages/panduza_admin_dashboard/__main__.py`
+    echo "---> ${path_to_admin_main}"
 
     echo "[Unit]" > $service_panduza_admin_path
-    echo "Description=Platform Python to support Panduza Meta Drivers" >> $service_panduza_admin_path
+    echo "Description=Panduza Admin Dashboard" >> $service_panduza_admin_path
     echo "After=network.target" >> $service_panduza_admin_path
     echo "[Service]" >> $service_panduza_admin_path
     echo "User=root" >> $service_panduza_admin_path
@@ -39,8 +40,31 @@ function install_systemctl_admin_service() {
 }
 
 #
+service_panduza_platform_path=/etc/systemd/system/panduza-py-platform.service
+function install_systemctl_platform_service() {
+
+    path_to_platform_main=`readlink -e ${python_venv_path}/lib/python3*/site-packages/panduza_platform/__main__.py`
+    echo "---> ${path_to_platform_main}"
+
+    echo "[Unit]" > $service_panduza_platform_path
+    echo "Description=Platform Python to support Panduza Meta Drivers" >> $service_panduza_platform_path
+    echo "After=network.target" >> $service_panduza_platform_path
+    echo "[Service]" >> $service_panduza_platform_path
+    echo "User=root" >> $service_panduza_platform_path
+    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> $service_panduza_platform_path
+    echo "ExecStop=/bin/kill $MAINPID" >> $service_panduza_platform_path
+    echo "[Install]" >> $service_panduza_platform_path
+    echo "WantedBy=multi-user.target" >> $service_panduza_platform_path
+}
+
+#
 function generic_install() {
+    rm -rf ${python_venv_path}
+
     python3 -m venv ${python_venv_path}
+
+    mkdir -p /etc/panduza/
+    cp -rv etc_panduza/* /etc/panduza/
 
     ${python_venv_path}/bin/pip3 install numpy
     ${python_venv_path}/bin/pip3 install nicegui==1.3.1
@@ -54,12 +78,12 @@ function generic_install() {
     ${python_venv_path}/bin/pip3 install pyusb==1.2.1
     ${python_venv_path}/bin/pip3 install PyHamcrest==2.0.4
 
-    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=client/"
-    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza_platform&subdirectory=platform/"
-    # ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-admin-dashboard"
-    ${python_venv_path}/bin/pip3 install /home/rodriguez/work/panduza-admin-dashboard
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@minor_fix#egg=panduza&subdirectory=client/"
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@minor_fix#egg=panduza_platform&subdirectory=platform/"
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-admin-dashboard"
 
     install_systemctl_admin_service
+    install_systemctl_platform_service
     install_systemctl_sudo_permissions
     systemctl daemon-reload
     systemctl enable panduza-admin.service
@@ -92,6 +116,7 @@ fi
 if [[ $osv == "ManjaroLinux_23.0.0" ]]; then
     pacman -S python --noconfirm
     pacman -S python-pip --noconfirm
+    pacman -S mosquitto --noconfirm
     generic_install
     exit 0
 fi
@@ -103,6 +128,7 @@ fi
 if [[ $id == "ManjaroLinux" ]]; then
     pacman -S python --noconfirm
     pacman -S python-pip --noconfirm
+    pacman -S mosquitto --noconfirm
     generic_install
     exit 0
 fi
