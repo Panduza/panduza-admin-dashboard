@@ -12,8 +12,6 @@ echo "OS: [$osv]"
 # PARAMETERS
 python_venv_path=/usr/local/bin/panduza/venv
 
-
-
 # ===================================================================
 
 # 
@@ -51,7 +49,7 @@ function install_systemctl_platform_service() {
     echo "After=network.target" >> ${service_panduza_platform_path}
     echo "[Service]" >> ${service_panduza_platform_path}
     echo "User=root" >> ${service_panduza_platform_path}
-    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_admin_main}" >> ${service_panduza_platform_path}
+    echo "ExecStart=${python_venv_path}/bin/python3 ${path_to_platform_main}" >> ${service_panduza_platform_path}
     echo "ExecStop=/bin/kill $MAINPID" >> ${service_panduza_platform_path}
     echo "[Install]" >> ${service_panduza_platform_path}
     echo "WantedBy=multi-user.target" >> ${service_panduza_platform_path}
