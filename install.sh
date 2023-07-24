@@ -56,7 +56,8 @@ function generic_install() {
 
     ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=client/"
     ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza_platform&subdirectory=platform/"
-    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-admin-dashboard"
+    # ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-admin-dashboard"
+    ${python_venv_path}/bin/pip3 install /home/rodriguez/work/panduza-admin-dashboard
 
     install_systemctl_admin_service
     install_systemctl_sudo_permissions
@@ -69,6 +70,7 @@ function generic_install() {
 # --------------------------
 
 if [[ $osv == "Ubuntu_22.04" ]]; then
+    apt-get install -y python3 python3-pip python3-venv
     generic_install
     exit 0
 fi
@@ -78,7 +80,7 @@ fi
 # --------------------------
 
 if [[ $id == "Ubuntu" ]]; then
-    apt-get install -y python3 python3-pip
+    apt-get install -y python3 python3-pip python3-venv
     generic_install
     exit 0
 fi
