@@ -12,13 +12,13 @@ class TreeManager:
 
         with ui.element('div').classes('flex flex-nowrap w-full'):
 
-            with ui.element('div').classes('m-4'):
+            with ui.element('div').classes('flex-1 ml-4 max-w-xs'):
                 self.library = ElementTreeLibrary(on_tree_change=self.on_tree_change)
 
-            with ui.element('div').classes('m-4'):
+            with ui.element('div').classes('flex-1 mx-4 max-w-lg'):
                 self.tree_editor = TreeEditor(on_item_dev_selected=self.on_item_dev_selected)
 
-            with ui.element('div').classes('max-w-md'):
+            with ui.element('div').classes('flex-1 mr-4 max-w-xs'):
                 self.item_editor = ElementItemEditor()
 
     # ---

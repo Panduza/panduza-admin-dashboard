@@ -37,7 +37,7 @@ class ItemDeviceEditor:
     def __init__(self, item) -> None:
         self.item = item
 
-        with ui.element('div').classes('m-4 min-w-full max-w-xl'):
+        with ui.element('div'):
             with ui.card().tight():
                 self.ui_image = ui.image('images/none.jpg')
                 with ui.element('div').classes('p-4'):

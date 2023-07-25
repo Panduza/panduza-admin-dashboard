@@ -14,8 +14,8 @@ class TreeEditor:
 
         self.data = [
             {'id': 'section_devices', 'label': 'devices', 'children': []},
-            {'id': 'section_benches', 'label': 'benches', 'children': []},
-            {'id': 'section_brokers', 'label': 'brokers', 'children': []},
+            # {'id': 'section_benches', 'label': 'benches', 'children': []},
+            # {'id': 'section_brokers', 'label': 'brokers', 'children': []},
         ]
 
         self.ui_container = ui.element('div')
@@ -30,21 +30,33 @@ class TreeEditor:
 
     def use_tree(self, name):
         
+        self.current_tree = TreeFile(name=name)
+        
         self.ui_container.clear()
         with self.ui_container:
             with ui.card().tight():
                 with ui.element('div').classes('p-4'):
 
-                    self.ui_title = ui.label().classes("text-xl mt-2")
+                    # self.ui_title = ui.label()
+                    self.ui_title = ui.input(label='Name', 
+                        placeholder='device_name',
+                        value=str(self.current_tree.name),
+                        on_change=self.rename_tree,
+                        validation={'Input too long': lambda value: len(value) < 20}).classes("text-xl mt-2")
+            
                     ui.button("New Device", on_click=self.create_device).classes("m-2")
                     ui.button("Active", on_click=self.activate_tree).classes("m-2")
                     self.ui_tree = ui.tree(self.data, on_select=self.select)
 
         
-        self.current_tree = TreeFile(name=name)
-        self.ui_title.text = str(self.current_tree.name)
+        
 
         self.update_tree_data()
+
+
+    def rename_tree(self, e):
+        print(e)
+
 
 
     def activate_tree(self):

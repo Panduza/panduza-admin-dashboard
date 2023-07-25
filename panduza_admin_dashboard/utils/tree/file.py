@@ -22,6 +22,13 @@ class TreeFile:
 
     # ---
 
+    def rename(self, new_name):
+        """Rename this tree file
+        """
+        print(new_name)
+
+    # ---
+
     def set_content(self, content):
         self.content = content
 
@@ -45,8 +52,9 @@ class TreeFile:
         try:
             with open(self.filepath, 'r') as f:
                 self.content = json.load(f)
-            # print("looadd ", self.content)
             self.load_from_content()
+        except FileNotFoundError as e:
+            self.content = ""
         except json.JSONDecodeError as e:
             self.content = ""
 
@@ -105,4 +113,5 @@ class TreeFile:
         self.counter_device += 1
         self.devices.append(new_device)
         return new_device
+
 

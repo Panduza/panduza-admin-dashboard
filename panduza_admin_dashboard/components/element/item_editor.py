@@ -13,7 +13,7 @@ class ElementItemEditor:
         self.current_tree = None
 
 
-        self.container = ui.element('div').classes('min-w-full max-w-xl')
+        self.container = ui.element('div')
 
 
 

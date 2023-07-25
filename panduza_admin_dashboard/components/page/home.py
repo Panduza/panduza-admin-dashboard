@@ -11,14 +11,14 @@ def create():
     @ui.page('/')
     def page_home() -> None:
 
-        with ui.element('div').classes('flex flex-nowrap w-full place-content-center'):
+        # with ui.element('div').classes('flex flex-nowrap w-full place-content-center'):
 
-            RequirementsChecker()
+        #     RequirementsChecker()
 
         # ui.label(f'Hello {app.storage.user["username"]}!').classes('text-2xl')
 
         # if not app.storage.user.get('authenticated', False):
-        # return RedirectResponse('/control')
+        return RedirectResponse('/control')
         # with ui.column().classes('absolute-center items-center'):
         #     ui.label(f'Hello {app.storage.user["username"]}!').classes('text-2xl')
         #     ui.button(on_click=lambda: (app.storage.user.clear(), ui.open('/login')), icon='logout').props('outline round')
