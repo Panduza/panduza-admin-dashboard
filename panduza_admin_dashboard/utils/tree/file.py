@@ -9,7 +9,10 @@ from .device import TreeDevice
 
 class TreeFile:
 
-    def __init__(self, name) -> None:
+    def __init__(self, parent_library, name) -> None:
+        """Constructor
+        """
+        self.parent = parent_library
 
         self.counter_device = 0
 
@@ -19,6 +22,32 @@ class TreeFile:
         self.devices = []
 
         self.load_from_file()
+
+        self._observer_cbs = []
+
+    # ---
+
+    def attach(self, observer_cb) -> None:
+        self._observer_cbs.append(observer_cb)
+
+    # ---
+
+    def detach(self, observer_cb) -> None:
+        self._observer_cbs.remove(observer_cb)
+
+    # ---
+
+    def notify(self) -> None:
+        for cb in self._observer_cbs:
+            cb(self)
+        self.parent.notify()
+
+    # ---
+
+    def delete(self):
+        """
+        """
+        os.remove(self.filepath)
 
     # ---
 

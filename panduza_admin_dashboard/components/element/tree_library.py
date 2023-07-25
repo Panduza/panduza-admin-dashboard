@@ -20,7 +20,7 @@ class ElementTreeLibrary:
 
             # List of items
             with ui.element('div').classes("flex"):
-                self.trees = TreeLibrary.get_list()
+                self.trees = TreeLibrary.GET().get_list()
                 with ui.element('div').classes('') as self.radio_container:
                     self.ui_trees_radio = ui.radio(self.trees, on_change=self.change_selected_tree).props('color=green')
 
@@ -35,6 +35,6 @@ class ElementTreeLibrary:
     def create_new_tree(self):
         TreeLibrary.create_new_tree()
         self.radio_container.remove(self.ui_trees_radio)
-        self.trees = TreeLibrary.get_list()
+        self.trees = TreeLibrary.GET().get_list()
         self.ui_trees_radio = ui.radio(self.trees)
         self.ui_trees_radio.move(self.radio_container)

@@ -21,22 +21,23 @@ class TreeEditor:
         self.ui_container = ui.element('div')
 
 
-        # ui.button("Delete", color='red', on_click=self.delete_tree).classes('mt-2')
 
+    # ---
 
+    def delete_tree(self):
+        self.current_tree.delete()
+        TreeLibrary.GET().notify()
 
-    # def delete_tree(self):
-    #     pass
+    # ---
 
     def use_tree(self, name):
         
-        self.current_tree = TreeFile(name=name)
-        
+        self.current_tree = TreeLibrary.GET().get_tree(name=name)
+
         self.ui_container.clear()
         with self.ui_container:
             with ui.card().tight():
-                with ui.element('div').classes('p-4'):
-
+                with ui.element('div').classes('px-4'):
                     # self.ui_title = ui.label()
                     self.ui_title = ui.input(label='Name', 
                         placeholder='device_name',
@@ -44,9 +45,17 @@ class TreeEditor:
                         on_change=self.rename_tree,
                         validation={'Input too long': lambda value: len(value) < 20}).classes("text-xl mt-2")
             
+                with ui.element('div').classes('px-4 flex'):
                     ui.button("New Device", on_click=self.create_device).classes("m-2")
+                    ui.element('div').classes('grow')
+                    # ui.toggle(["on", "off"], value="off", on_change=).classes("m-2")
                     ui.button("Active", on_click=self.activate_tree).classes("m-2")
+
+                with ui.element('div').classes('px-4'):
                     self.ui_tree = ui.tree(self.data, on_select=self.select)
+
+                with ui.element('div').classes('px-4 flex justify-end'):
+                    ui.button("Delete", color='red', on_click=self.delete_tree).classes('m-2')
 
         
         

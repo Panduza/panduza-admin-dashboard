@@ -1,5 +1,4 @@
 import os
-import shutil
 from .file import TreeFile
 
 TREE_LIBRARY_DIR_PATH="/etc/panduza/trees"
@@ -7,7 +6,42 @@ TREE_ACTIVE_PATH="/etc/panduza/tree.json"
 
 class TreeLibrary:
 
-    def get_list():
+    # ---
+
+    Instance = None
+    def GET():
+        """Singleton Getter
+        """
+        if TreeLibrary.Instance is None:
+            TreeLibrary.Instance = TreeLibrary()
+        return TreeLibrary.Instance
+
+    # ---
+
+    def __init__(self) -> None:
+        """Constructor
+        """
+        self._observer_cbs = []
+
+    # ---
+
+    def attach(self, observer_cb) -> None:
+        self._observer_cbs.append(observer_cb)
+
+    # ---
+
+    def detach(self, observer_cb) -> None:
+        self._observer_cbs.remove(observer_cb)
+
+    # ---
+
+    def notify(self) -> None:
+        for cb in self._observer_cbs:
+            cb(self)
+
+    # ---
+
+    def get_list(self):
         """
         """
         # Create path
@@ -27,10 +61,10 @@ class TreeLibrary:
 
     # ---
 
-    def tree_name_exists(name):
+    def tree_name_exists(self, name):
         """Return true if the name already exists among tree files
         """
-        existing_trees = TreeLibrary.get_list()
+        existing_trees = TreeLibrary.GET().get_list()
         for t in existing_trees:
             if name == t:
                 return True
@@ -38,10 +72,9 @@ class TreeLibrary:
 
     # ---
 
-    def create_new_tree():
+    def create_new_tree(self):
         """Create a new tree
         """
-
         # Get a unique new name
         i = 0
         new_name = f"new_tree_{i}"
@@ -50,7 +83,14 @@ class TreeLibrary:
             new_name = f"new_tree_{i}"
 
         # Create the file
-        new_tree = TreeFile(new_name)
+        new_tree = TreeFile(self, new_name)
         new_tree.save_to_file()
         return new_tree
+
+    # ---
+
+    def get_tree(self, name):
+        """
+        """
+        return TreeFile(self, name)
 
