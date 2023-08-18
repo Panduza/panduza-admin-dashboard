@@ -28,22 +28,20 @@ class TabPlatformLogs:
 
     def __init__(self) -> None:
 
-        # with ui.scroll_area():
-        #     md = ui.html("pppp </br>")
 
-        # for i in range (1,300):
+        self.ui_md = ui.html()
 
-        # Usage example
+
+        # self.ui_timer = ui.timer(0.5, self.refresh_content)
+
+
+    def refresh_content(self):
+
         service_name = 'panduza-py-platform.service'
         logs = get_daemon_logs(service_name)
-
-
-        # with ui.scroll_area() as scroll_area:
-        md = ui.html()
-            # scroll_area.classes("fit")
-
         for line in logs.splitlines():
-            md.content += f"{line}</br>"
+            self.ui_md.content += f"{line}</br>"
+
 
 
 

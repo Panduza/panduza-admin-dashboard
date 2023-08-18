@@ -111,8 +111,6 @@ class TreeEditor:
             self.on_item_dev_selected(None)
 
         if obj_idx.startswith("dev_"):
-            print("dev !!")
-
             if self.on_item_dev_selected:
                 device = self.current_tree.get_device(obj_idx)
                 device.attach(self.save_tree)
