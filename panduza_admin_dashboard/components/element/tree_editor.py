@@ -45,11 +45,11 @@ class TreeEditor:
                         on_change=self.rename_tree,
                         validation={'Input too long': lambda value: len(value) < 20}).classes("text-xl mt-2")
             
-                with ui.element('div').classes('px-4 flex'):
+                with ui.element('div').classes('px-4 flex') as self.action_bar:
                     ui.button("New Device", on_click=self.create_device).classes("m-2")
                     ui.element('div').classes('grow')
-                    # ui.toggle(["on", "off"], value="off", on_change=).classes("m-2")
-                    ui.button("Active", on_click=self.activate_tree).classes("m-2")
+                    if not self.current_tree.is_active():
+                        self.active_button = ui.button("Active", on_click=self.activate_tree).classes("m-2")
 
                 with ui.element('div').classes('px-4'):
                     self.ui_tree = ui.tree(self.data, on_select=self.select)
@@ -58,6 +58,7 @@ class TreeEditor:
                     ui.button("Delete", color='red', on_click=self.delete_tree).classes('m-2')
 
         
+
         self.update_tree_data()
 
     # ---
@@ -65,13 +66,16 @@ class TreeEditor:
     def rename_tree(self, e):
         """Rename the current tree
         """
+        # Check current tree existance
         assert self.current_tree
 
+        # Try renaming and display a warning to the user if there is a problem
         try:
             self.current_tree.rename(e.value)
         except Exception as e:
             ui.notify(str(e), type='warning')
 
+        # Notify the library that change happend
         TreeLibrary.GET().notify()
 
     # ---
@@ -80,7 +84,12 @@ class TreeEditor:
         # Save the tree file and update ui
         if self.current_tree:
             self.current_tree.activate()
-        
+
+            self.action_bar.remove(self.active_button)
+
+            ui.notify("Activation Successful", type="positive")
+
+    # ---
 
     def save_tree(self, item = None):
         print("okkkk save !!!")
@@ -90,6 +99,7 @@ class TreeEditor:
             self.current_tree.save_to_file()
             self.update_tree_data()
 
+    # ---
 
     def select(self, e):
         print("edit device", e)
@@ -107,6 +117,16 @@ class TreeEditor:
                 device = self.current_tree.get_device(obj_idx)
                 device.attach(self.save_tree)
                 self.on_item_dev_selected(device)
+
+        elif obj_idx == "section_devices":
+            
+            print(self.ui_tree._props)
+            self.ui_tree._props['expanded'] = ["section_devices"]
+            self.ui_tree._props['selected'] = None
+
+            self.ui_tree.update()
+            self.on_item_dev_selected(None)
+
         else:
             self.on_item_dev_selected(None)
 

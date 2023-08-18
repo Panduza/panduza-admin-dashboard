@@ -5,6 +5,9 @@ import shutil
 TREE_LIBRARY_DIR_PATH="/etc/panduza/trees"
 TREE_ACTIVE_PATH="/etc/panduza/tree.json"
 
+ADMIN_CONFIG_FILE="/etc/panduza/admin.json"
+
+
 from .device import TreeDevice
 
 class TreeFile:
@@ -130,6 +133,30 @@ class TreeFile:
     def activate(self):
         self.save_to_file()
         shutil.copyfile(self.filepath, TREE_ACTIVE_PATH)
+
+        try:
+            with open(ADMIN_CONFIG_FILE) as json_file:
+                config_data = json.load(json_file)      
+        except Exception as e:
+            config_data = {}
+            pass  
+        config_data["active_tree"] = self.name
+        with open(ADMIN_CONFIG_FILE, "w") as json_file:
+            json.dump(config_data, json_file)
+
+    # ---
+
+    def is_active(self):
+        """Active means that this tree is the tree loaded into the platform
+        """
+        try:
+            with open(ADMIN_CONFIG_FILE) as json_file:
+                config_data = json.load(json_file)      
+        except Exception as e:
+            config_data = {}
+            pass  
+        active_tree_name = config_data.get("active_tree", "")
+        return (active_tree_name == self.name)
 
     # ---
 
