@@ -55,6 +55,15 @@ class TreeFile:
         """Rename this tree file
         """
         print(new_name)
+        new_filepath = os.path.join(TREE_LIBRARY_DIR_PATH, f"{new_name}.json" )
+
+        if os.path.isfile(new_filepath):
+            raise Exception("This name is already used (rename not allowed)")
+        else:
+            # Rename the file
+            os.rename(self.filepath, new_filepath)
+            self.name = new_name
+            self.filepath = new_filepath
 
     # ---
 

@@ -3,6 +3,8 @@ from utils.tree import TreeLibrary
 
 
 class ElementTreeLibrary:
+    """Manage the list of available trees in the system
+    """
 
     def __init__(self, on_tree_change = None) -> None:
         """Constructor
@@ -12,6 +14,7 @@ class ElementTreeLibrary:
 
         # Compose layout
         with ui.card().tight():
+            # Display icon
             ui.image('images/logo_card.jpg')
 
             # Buttons
@@ -20,21 +23,31 @@ class ElementTreeLibrary:
 
             # List of items
             with ui.element('div').classes("flex"):
-                self.trees = TreeLibrary.GET().get_list()
-                with ui.element('div').classes('') as self.radio_container:
-                    self.ui_trees_radio = ui.radio(self.trees, on_change=self.change_selected_tree).props('color=green')
+                self.radio_container = ui.element('div').classes('')
+
+        self.update_tree_list()
+        TreeLibrary.GET().attach(self.update_tree_list)
 
     # ---
 
     def change_selected_tree(self, e):
-        if self.on_tree_change:
-            self.on_tree_change(e.value)
+        """Triggered when a new tree is selected
+        """
+        assert self.on_tree_change
+        print(f"Select tree {e.value}")
+        self.on_tree_change(e.value)
 
     # ---
 
     def create_new_tree(self):
-        TreeLibrary.create_new_tree()
-        self.radio_container.remove(self.ui_trees_radio)
+        TreeLibrary.GET().create_new_tree()
+        self.update_tree_list()
+
+    # ---
+
+    def update_tree_list(self):
+        self.radio_container.clear()
         self.trees = TreeLibrary.GET().get_list()
-        self.ui_trees_radio = ui.radio(self.trees)
+        self.ui_trees_radio = ui.radio(self.trees, on_change=self.change_selected_tree).props('color=green')
         self.ui_trees_radio.move(self.radio_container)
+

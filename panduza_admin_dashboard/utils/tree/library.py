@@ -37,7 +37,7 @@ class TreeLibrary:
 
     def notify(self) -> None:
         for cb in self._observer_cbs:
-            cb(self)
+            cb()
 
     # ---
 
@@ -78,7 +78,7 @@ class TreeLibrary:
         # Get a unique new name
         i = 0
         new_name = f"new_tree_{i}"
-        while TreeLibrary.tree_name_exists(new_name):
+        while self.tree_name_exists(new_name):
             i+=1
             new_name = f"new_tree_{i}"
 

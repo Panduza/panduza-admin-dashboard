@@ -75,8 +75,8 @@ function generic_install() {
     ${python_venv_path}/bin/pip3 install pyusb==1.2.1
     ${python_venv_path}/bin/pip3 install PyHamcrest==2.0.4
 
-    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@minor_fix#egg=panduza&subdirectory=client/"
-    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@minor_fix#egg=panduza_platform&subdirectory=platform/"
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza&subdirectory=client/"
+    ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-py.git@main#egg=panduza_platform&subdirectory=platform/"
     ${python_venv_path}/bin/pip3 install "git+https://github.com/Panduza/panduza-admin-dashboard"
 
     install_systemctl_admin_service

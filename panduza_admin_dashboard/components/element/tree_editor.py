@@ -58,15 +58,23 @@ class TreeEditor:
                     ui.button("Delete", color='red', on_click=self.delete_tree).classes('m-2')
 
         
-        
-
         self.update_tree_data()
 
+    # ---
 
     def rename_tree(self, e):
-        print(e)
+        """Rename the current tree
+        """
+        assert self.current_tree
 
+        try:
+            self.current_tree.rename(e.value)
+        except Exception as e:
+            ui.notify(str(e), type='warning')
 
+        TreeLibrary.GET().notify()
+
+    # ---
 
     def activate_tree(self):
         # Save the tree file and update ui
