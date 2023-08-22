@@ -16,10 +16,19 @@ class Row:
         with ui.grid(columns=3):
             ui.label(self.name)
             ui.label(str(self.info))
-            ui.button('Test !', on_click=self.test)
+            ui.button('Test Interface', on_click=self.open_test_interface)
 
-    def test(self):
-        ui.notify(f'You clicked me!')
+
+    def open_test_interface(self):
+
+        with ui.dialog() as dialog:
+            with ui.card():
+                ui.label(str(self.info))
+                ui.button('Close', on_click=dialog.close)
+
+        dialog.open()
+
+
 
 
 class InterfaceTester:
