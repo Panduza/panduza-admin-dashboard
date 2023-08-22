@@ -2,43 +2,8 @@ from nicegui import ui
 
 from panduza import Client, Bps, Dio
 
+from .tester import TesterBps
 
-
-class DialogTestBps:
-    
-    def __init__(self, name, info) -> None:
-        self.name = name
-        self.info = info
-
-        self.bps = Bps(addr="localhost", port=1883, topic=self.name)
-
-        with ui.dialog() as self.dialog:
-            with ui.card():
-                
-                with ui.grid(columns=2):
-                    ui.number(label='Voltage', value=3.1415927, format='%.2f')
-                    ui.button('Apply', on_click=self.dialog.close).disable()
-
-                    ui.number(label='Current', value=3.1415927, format='%.2f')
-                        # on_change=lambda e: result.set_text(f'you entered: {e.value}'))
-                    ui.button('Apply', on_click=self.dialog.close).disable()
-
-                    ui.label('state')
-                    ui.button('Toggle', on_click=self.toggle)
-
-                ui.button('Close', on_click=self.dialog.close)
-
-    def toggle(self):
-        value = self.bps.enable.value.get()
-        if value:
-            self.bps.enable.value.set(False)
-        else:
-            self.bps.enable.value.set(True)
-        print(value)
-
-
-    def open(self):
-        self.dialog.open()
 
 
 
@@ -59,7 +24,7 @@ class Row:
         if str(self.info['type']) == str('bps'):
 
             print("oookkk ")
-            dialog = DialogTestBps(self.name, self.info)
+            dialog = TesterBps(self.name, self.info)
             dialog.open()
         else:
             print("oooo")
