@@ -1,8 +1,38 @@
 from nicegui import ui
 
+from panduza import Client, Bps
 
 
-from panduza import Client
+
+class DialogTestBps:
+    
+    def __init__(self, name, info) -> None:
+        self.name = name
+        self.info = info
+
+        with ui.dialog() as self.dialog:
+            with ui.card():
+                
+                with ui.grid(columns=2):
+                    ui.number(label='Voltage', value=3.1415927, format='%.2f')
+                    ui.button('Apply', on_click=self.dialog.close).disable()
+
+                    ui.number(label='Current', value=3.1415927, format='%.2f')
+                        # on_change=lambda e: result.set_text(f'you entered: {e.value}'))
+                    ui.button('Apply', on_click=self.dialog.close).disable()
+
+                    ui.label('state')
+                    ui.button('Toggle', on_click=self.dialog.close)
+
+                ui.button('Close', on_click=self.dialog.close)
+     
+
+
+    def toggle(self):
+        pass
+
+    def open(self):
+        self.dialog.open()
 
 
 
@@ -20,15 +50,13 @@ class Row:
 
 
     def open_test_interface(self):
+        if str(self.info['type']) == str('bps'):
 
-        with ui.dialog() as dialog:
-            with ui.card():
-                ui.label(str(self.info))
-                ui.button('Close', on_click=dialog.close)
-
-        dialog.open()
-
-
+            print("oookkk ")
+            dialog = DialogTestBps(self.name, self.info)
+            dialog.open()
+        else:
+            print("oooo")
 
 
 class InterfaceTester:
