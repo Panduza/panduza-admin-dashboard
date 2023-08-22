@@ -80,8 +80,12 @@ class ButtonStartStop:
         else:
             print(f"- Error Service State: {self.service_state}")
 
+    # ---
+
     def action_start(self):
-        # print("---- start")
+        """Actions triggered when the start button is pressed
+        """
+        print("+ action_start")
 
         if get_service_mosquitto_activation_status() != "active":
             cmd = ['systemctl', 'start', "mosquitto.service"]
@@ -89,6 +93,9 @@ class ButtonStartStop:
 
         cmd = ['systemctl', 'start', "panduza-py-platform.service"]
         text = execute_sys_cmd(cmd)
+
+        print("- action_start")
+
 
     def action_stop(self):
         # print("---- stop")

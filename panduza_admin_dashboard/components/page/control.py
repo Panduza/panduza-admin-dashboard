@@ -3,9 +3,12 @@ from fastapi.responses import RedirectResponse
 
 from components.tab_platform_logs import TabPlatformLogs
 
+
+from components.element import StatusAera
 from components.element import TreeManager
 from components.element import InterfaceTester
 from components.element.button_start_stop import ButtonStartStop
+
 
 from utils.system.checker import get_service_activation_status
 
@@ -25,9 +28,9 @@ class PageControl:
         
                 # Tab navigation
                 with ui.tabs().props("horizontal") as self.tabs:
-                    self.tab_logs = ui.tab('Logs')
-                    self.tab_test = ui.tab('Test')
                     self.tab_tree = ui.tab('Tree')
+                    self.tab_status = ui.tab('Status')
+                    self.tab_control = ui.tab('Control')
 
                 # Middle separator
                 ui.element('div').classes('grow')
@@ -38,9 +41,9 @@ class PageControl:
         # BODY
         with ui.tab_panels(self.tabs, value=self.tab_tree).classes('w-full') as self.tab_panels:
         
-            with ui.tab_panel(self.tab_logs).classes("h-full"):
-                TabPlatformLogs()
-            with ui.tab_panel(self.tab_test):
+            with ui.tab_panel(self.tab_status).classes("h-full"):
+                self.status_area = StatusAera()
+            with ui.tab_panel(self.tab_control):
                 InterfaceTester()
             with ui.tab_panel(self.tab_tree):
                 TreeManager()
@@ -65,21 +68,27 @@ class PageControl:
         self.service_state = new_state
 
         if self.service_state == "inactive":
-            self.tab_test.disable()
+            self.status_area.update_content()
             self.tab_tree.enable()
+            self.tab_status.enable()
+            self.tab_control.disable()
             self.tab_panels.value = self.tab_tree
             self.tab_panels.update()
 
         elif self.service_state == "active":
             self.tab_tree.disable()
-            self.tab_test.enable()
-            self.tab_panels.value = self.tab_test
+            self.tab_status.disable()
+            self.tab_control.enable()
+            self.tab_panels.value = self.tab_control
             self.tab_panels.update()
 
         elif self.service_state == "failed":
-            self.tab_test.disable()
+
+            self.status_area.update_content()
             self.tab_tree.enable()
-            self.tab_panels.value = self.tab_logs
+            self.tab_status.enable()
+            self.tab_control.disable()
+            self.tab_panels.value = self.tab_status
             self.tab_panels.update()
 
         else:

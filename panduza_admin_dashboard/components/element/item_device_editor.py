@@ -10,7 +10,7 @@ model_database = {
         "img": "hm310t.jpg",
         "settings": {}
     },
-    "Panduza.FakePsu": {
+    "Panduza.FakeBps": {
         "img": "fake_psu.jpg",
         "settings": [
             {
@@ -47,7 +47,7 @@ class ItemDeviceEditor:
                                 on_change=self.change_name,
                                 validation={'Input too long': lambda value: len(value) < 20})
 
-                    choices = ["Hanmatek.Hm310t", "Panduza.FakePsu", "Panduza.FakeDioController"]
+                    choices = list(model_database.keys())
                     ui.select(choices, value=self.item.model, on_change=self.change_model)
 
                     self.ui_settings_container = ui.element('div')
