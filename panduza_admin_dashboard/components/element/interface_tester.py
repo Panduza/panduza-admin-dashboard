@@ -3,6 +3,7 @@ from nicegui import ui
 from panduza import Client, Bps, Dio
 
 from .tester import TesterBps
+from .tester import TesterAmmeter
 
 
 
@@ -22,12 +23,13 @@ class Row:
 
     def open_test_interface(self):
         if str(self.info['type']) == str('bps'):
-
-            print("oookkk ")
             dialog = TesterBps(self.name, self.info)
             dialog.open()
+        elif str(self.info['type']) == str('ammeter'):
+            dialog = TesterAmmeter(self.name, self.info)
+            dialog.open()
         else:
-            print("oooo")
+            print("not supported")
 
 
 class InterfaceTester:
