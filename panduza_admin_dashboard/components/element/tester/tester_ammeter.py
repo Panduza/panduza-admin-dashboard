@@ -1,8 +1,5 @@
 from nicegui import ui
-
-
 from panduza import Ammeter
-
 
 
 class TesterAmmeter:

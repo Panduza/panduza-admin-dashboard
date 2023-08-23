@@ -15,9 +15,10 @@ class Row:
         self.info = info
         # print(json.loads(self.info).get("type", ""))
         
-        with ui.grid(columns=3):
+        with ui.grid(columns=4):
             ui.label(self.name)
-            ui.label(str(self.info))
+            ui.label(str(self.info['type']))
+            ui.label(str(self.info['version']))
             ui.button('Test Interface', on_click=self.open_test_interface)
 
 
@@ -36,20 +37,22 @@ class InterfaceTester:
 
     def __init__(self) -> None:
 
-        ui.button('Refresh', on_click=self.refresh_interfaces)
+        # ui.button('Refresh', on_click=self.refresh_interfaces)
 
         self.container = ui.element('div')
 
     # ---
 
     def refresh_interfaces(self):
-        
+
         c = Client(url="localhost", port=1883)
         c.connect()
         interfaces = c.scan_interfaces()
 
-        for name, info in interfaces.items():
-            r = Row(name, info)
+        self.container.clear()
+        with self.container:
+            for name, info in interfaces.items():
+                r = Row(name, info)
 
 
 

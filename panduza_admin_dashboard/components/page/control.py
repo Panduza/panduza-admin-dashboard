@@ -44,7 +44,7 @@ class PageControl:
             with ui.tab_panel(self.tab_status).classes("h-full"):
                 self.status_area = StatusAera()
             with ui.tab_panel(self.tab_control):
-                InterfaceTester()
+                self.tester = InterfaceTester()
             with ui.tab_panel(self.tab_tree):
                 TreeManager()
 
@@ -80,6 +80,7 @@ class PageControl:
             self.tab_status.disable()
             self.tab_control.enable()
             self.tab_panels.value = self.tab_control
+            self.tester.refresh_interfaces()
             self.tab_panels.update()
 
         elif self.service_state == "failed":

@@ -1,8 +1,5 @@
 from nicegui import ui
-
-
-from panduza import Client, Bps, Dio
-
+from panduza import Bps
 
 
 class TesterBps:
@@ -17,17 +14,40 @@ class TesterBps:
             with ui.card():
                 
                 with ui.grid(columns=2):
-                    ui.number(label='Voltage', value=3.1415927, format='%.2f')
-                    ui.button('Apply', on_click=self.dialog.close).disable()
+                    ui.number(label='Voltage', value=3.1415927, format='%.2f', on_change=self.on_voltage_change)
+                    self.ui_voltage_apply = ui.button('Apply', on_click=self.apply_voltage_change)
+                    self.ui_voltage_apply.disable()
 
-                    ui.number(label='Current', value=3.1415927, format='%.2f')
-                        # on_change=lambda e: result.set_text(f'you entered: {e.value}'))
-                    ui.button('Apply', on_click=self.dialog.close).disable()
+                    ui.number(label='Current', value=3.1415927, format='%.2f', on_change=self.on_current_change)
+                    self.ui_current_apply = ui.button('Apply', on_click=self.apply_current_change)
+                    self.ui_current_apply.disable()
 
                     self.ui_state_value_label = ui.label('state')
                     ui.button('Toggle', on_click=self.toggle)
 
                 ui.button('Close', on_click=self.dialog.close)
+
+    # ---
+
+    def on_voltage_change(self, e):
+        self.ui_voltage_apply.enable()
+        self.voltage_change = e.value
+
+    def apply_voltage_change(self):
+    #     self.bps.volts.value.set(self.voltage_change)
+        pass
+
+    # ---
+
+    def on_current_change(self, e):
+        self.ui_current_apply.enable()
+        self.current_change = e.value
+
+    def apply_current_change(self):
+    #     self.ammeter.measure.current_cycle.set(self.current_change)
+        pass
+
+    # ---
 
     def toggle(self):
         value = self.bps.enable.value.get()
