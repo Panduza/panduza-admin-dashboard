@@ -1,9 +1,6 @@
 from nicegui import app, ui
 from fastapi.responses import RedirectResponse
 
-from components.tab_platform_logs import TabPlatformLogs
-
-
 from components.element import StatusAera
 from components.element import TreeManager
 from components.element import InterfaceTester

@@ -15,11 +15,12 @@ class ButtonStartStop:
         self.previous_state = None
         self.service_state = get_service_activation_status()
 
-        self.ui_button = ui.button(text="start", on_click=self.action)
+        with ui.element('div').classes("flex items-stretch"):
+            with ui.element('div').classes("m-2") as self.ui_div_button:
+                self.ui_button = ui.button(text="start", on_click=self.action)
 
-        with ui.element('div').classes('flex mx-4 p-4') as status:
-            self.ui_status = status
-            self.ui_label = ui.label('inside a colored div')
+            with ui.element('div') as self.ui_status:
+                self.ui_label = ui.label('inside a colored div')
 
         self.ui_timer = ui.timer(1.0, self.check_service_activation)
 
@@ -42,22 +43,35 @@ class ButtonStartStop:
         """
         """
         if self.service_state == "inactive":
-            self.ui_button.text = "START"
-            self.ui_button.props('color=green')
+            self.ui_div_button.clear()
+            with self.ui_div_button:
+                self.ui_button = ui.button(text="START", on_click=self.action)
+                self.ui_button.props('color=green')
             self.ui_label.text = "Platform Inactive"
-            self.ui_status.classes("bg-orange-500")
+            self.ui_status.classes(replace="bg-orange-500 p-4")
 
         elif self.service_state == "active":
-            self.ui_button.text = "STOP"
-            self.ui_button.props('color=red')
+            self.ui_div_button.clear()
+            with self.ui_div_button:
+                self.ui_button = ui.button(text="STOP", on_click=self.action)
+                self.ui_button.props('color=red')
             self.ui_label.text = "Platform Active"
-            self.ui_status.classes("bg-green-500")
+            self.ui_status.classes(replace="bg-green-500 p-4")
 
         elif self.service_state == "failed":
-            self.ui_button.text = "START"
-            self.ui_button.props('color=green')
+            self.ui_div_button.clear()
+            with self.ui_div_button:
+                self.ui_button = ui.button(text="START", on_click=self.action)
+                self.ui_button.props('color=green')
             self.ui_label.text = "Platform Failed"
-            self.ui_status.classes("bg-red-500")
+            self.ui_status.classes(replace="bg-red-500 p-4")
+
+        # Use just click the button
+        # Remove the button and show a spinner
+        elif self.service_state == "busy":
+            self.ui_div_button.clear()
+            with self.ui_div_button:
+                ui.spinner('dots', size='lg', color='red')
 
         else:
             print(f"- Unknown Service State: '{self.service_state}'")
@@ -71,14 +85,22 @@ class ButtonStartStop:
     # ---
 
     def action(self):
-        if self.service_state == "inactive":
+        """Execute the action matching the state
+        """
+        
+        # Turn the button as busy before executing the action
+        state_before_action = self.service_state
+        self.change_state("busy")
+    
+        # Execute the action
+        if state_before_action == "inactive":
             self.action_start()
-        elif self.service_state == "active":
+        elif state_before_action == "active":
             self.action_stop()
-        elif self.service_state == "failed":
+        elif state_before_action == "failed":
             self.action_start()
         else:
-            print(f"- Error Service State: {self.service_state}")
+            print(f"- Error Service State: {state_before_action}")
 
     # ---
 

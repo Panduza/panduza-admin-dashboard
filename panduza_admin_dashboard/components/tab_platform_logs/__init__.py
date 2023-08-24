@@ -1,5 +1,0 @@
-
-
-
-from .tab import TabPlatformLogs
-
