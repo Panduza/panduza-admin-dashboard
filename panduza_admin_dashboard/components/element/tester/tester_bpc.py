@@ -8,24 +8,41 @@ class TesterBpc:
         self.name = name
         self.info = info
 
-        self.Bpc = Bpc(addr="localhost", port=1883, topic=self.name)
+        self.bpc = Bpc(addr="localhost", port=1883, topic=self.name)
+
+        self.bpc.enable.attach_event_listener(self.on_enable_event)
+        self.bpc.voltage.attach_event_listener(self.on_voltage_event)
+        self.bpc.current.attach_event_listener(self.on_current_event)
+
 
         with ui.dialog() as self.dialog:
             with ui.card():
                 
                 with ui.grid(columns=2):
-                    ui.number(label='Voltage', value=3.1415927, format='%.2f', on_change=self.on_voltage_change)
+                    ui.number(label='Voltage', value=self.bpc.voltage.value.get(), format='%.2f', on_change=self.on_voltage_change)
                     self.ui_voltage_apply = ui.button('Apply', on_click=self.apply_voltage_change)
                     self.ui_voltage_apply.disable()
 
-                    ui.number(label='Current', value=3.1415927, format='%.2f', on_change=self.on_current_change)
+                    ui.number(label='Current', value=self.bpc.current.value.get(), format='%.2f', on_change=self.on_current_change)
                     self.ui_current_apply = ui.button('Apply', on_click=self.apply_current_change)
                     self.ui_current_apply.disable()
 
-                    self.ui_state_value_label = ui.label('state')
+                    state = self.bpc.enable.value.get()
+                    self.ui_state_value_label = ui.label(str(state))
                     ui.button('Toggle', on_click=self.toggle)
 
                 ui.button('Close', on_click=self.dialog.close)
+
+
+
+    def on_enable_event(self, update):
+        print(update)
+
+    def on_voltage_event(self, update):
+        print(update)
+
+    def on_current_event(self, update):
+        print(update)
 
     # ---
 
@@ -34,7 +51,7 @@ class TesterBpc:
         self.voltage_change = e.value
 
     def apply_voltage_change(self):
-    #     self.Bpc.volts.value.set(self.voltage_change)
+    #     self.bpc.volts.value.set(self.voltage_change)
         pass
 
     # ---
@@ -50,13 +67,13 @@ class TesterBpc:
     # ---
 
     def toggle(self):
-        value = self.Bpc.enable.value.get()
+        value = self.bpc.enable.value.get()
         if value:
-            self.Bpc.enable.value.set(False)
+            self.bpc.enable.value.set(False)
         else:
-            self.Bpc.enable.value.set(True)
+            self.bpc.enable.value.set(True)
             
-        self.ui_state_value_label.set_text(str(self.Bpc.enable.value.get()))
+        self.ui_state_value_label.set_text(str(self.bpc.enable.value.get()))
 
 
     def open(self):

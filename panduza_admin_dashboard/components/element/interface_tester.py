@@ -23,7 +23,7 @@ class Row:
 
 
     def open_test_interface(self):
-        if str(self.info['type']) == str('Bpc'):
+        if str(self.info['type']) == str('bpc'):
             dialog = TesterBpc(self.name, self.info)
             dialog.open()
         elif str(self.info['type']) == str('ammeter'):
