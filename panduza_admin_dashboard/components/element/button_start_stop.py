@@ -113,6 +113,9 @@ class ButtonStartStop:
             cmd = ['systemctl', 'start', "mosquitto.service"]
             text = execute_sys_cmd(cmd)
 
+        cmd = ['systemctl', 'enable', "panduza-py-platform.service"]
+        text = execute_sys_cmd(cmd)
+
         cmd = ['systemctl', 'start', "panduza-py-platform.service"]
         text = execute_sys_cmd(cmd)
 
@@ -120,7 +123,9 @@ class ButtonStartStop:
 
 
     def action_stop(self):
-        # print("---- stop")
+        cmd = ['systemctl', 'disable', "panduza-py-platform.service"]
+        text = execute_sys_cmd(cmd)
+
         cmd = ['systemctl', 'stop', "panduza-py-platform.service"]
         text = execute_sys_cmd(cmd)
 
