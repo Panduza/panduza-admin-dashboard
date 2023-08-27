@@ -1,8 +1,8 @@
 from nicegui import ui
 
-from panduza import Client, Bps, Dio
+from panduza import Client, Bpc, Dio
 
-from .tester import TesterBps
+from .tester import TesterBpc
 from .tester import TesterAmmeter
 
 
@@ -23,8 +23,8 @@ class Row:
 
 
     def open_test_interface(self):
-        if str(self.info['type']) == str('bps'):
-            dialog = TesterBps(self.name, self.info)
+        if str(self.info['type']) == str('Bpc'):
+            dialog = TesterBpc(self.name, self.info)
             dialog.open()
         elif str(self.info['type']) == str('ammeter'):
             dialog = TesterAmmeter(self.name, self.info)
