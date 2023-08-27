@@ -19,11 +19,11 @@ class TesterBpc:
             with ui.card():
                 
                 with ui.grid(columns=2):
-                    ui.number(label='Voltage', value=self.bpc.voltage.value.get(), format='%.2f', on_change=self.on_voltage_change)
+                    self.ui_voltage_value = ui.number(label='Voltage', value=self.bpc.voltage.value.get(), format='%.2f', on_change=self.on_voltage_change)
                     self.ui_voltage_apply = ui.button('Apply', on_click=self.apply_voltage_change)
                     self.ui_voltage_apply.disable()
 
-                    ui.number(label='Current', value=self.bpc.current.value.get(), format='%.2f', on_change=self.on_current_change)
+                    self.ui_current_value = ui.number(label='Current', value=self.bpc.current.value.get(), format='%.2f', on_change=self.on_current_change)
                     self.ui_current_apply = ui.button('Apply', on_click=self.apply_current_change)
                     self.ui_current_apply.disable()
 
@@ -34,6 +34,7 @@ class TesterBpc:
                 ui.button('Close', on_click=self.dialog.close)
 
 
+    # ---
 
     def on_enable_event(self, update):
         print(update)
@@ -51,8 +52,9 @@ class TesterBpc:
         self.voltage_change = e.value
 
     def apply_voltage_change(self):
-    #     self.bpc.volts.value.set(self.voltage_change)
-        pass
+        self.bpc.voltage.value.set(self.voltage_change)
+        self.voltage_change = None
+        self.ui_voltage_apply.disable()
 
     # ---
 
@@ -61,8 +63,8 @@ class TesterBpc:
         self.current_change = e.value
 
     def apply_current_change(self):
-    #     self.ammeter.measure.current_cycle.set(self.current_change)
-        pass
+        self.current_change = None
+        self.ui_current_apply.disable()
 
     # ---
 
