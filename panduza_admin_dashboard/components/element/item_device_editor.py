@@ -10,7 +10,7 @@ ref_database = {
         "img": "hm310t.jpg",
         "settings": {}
     },
-    "Panduza.FakeBpc": {
+    "Panduza.FakeBps": {
         "img": "fake_psu.jpg",
         "settings": [
             {
