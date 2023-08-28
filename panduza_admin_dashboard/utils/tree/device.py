@@ -7,7 +7,7 @@ class TreeDevice:
     def __init__(self, idx=None) -> None:
         self.idx = idx
         self.name = "new device"
-        self.model = ""
+        self.ref = ""
         self.deletion = False
         self.settings = {}
         self._observer_cbs = []
@@ -25,14 +25,14 @@ class TreeDevice:
     def to_dict(self):
         tmp = {
             "name": self.name,
-            "model": self.model
+            "ref": self.ref
         }
         tmp["settings"] = self.settings
         return tmp
 
     def from_dict(self, dict_obj):
         self.name = dict_obj.get("name", "")
-        self.model = dict_obj.get("model", "")
+        self.ref = dict_obj.get("ref", "")
         self.settings = dict_obj.get("settings", {})
 
     def flag_for_deletion(self):

@@ -5,7 +5,7 @@ from utils.tree import TreeLibrary
 
 
 
-model_database = {
+ref_database = {
     "Hanmatek.Hm310t": {
         "img": "hm310t.jpg",
         "settings": {}
@@ -47,8 +47,8 @@ class ItemDeviceEditor:
                                 on_change=self.change_name,
                                 validation={'Input too long': lambda value: len(value) < 20})
 
-                    choices = list(model_database.keys())
-                    ui.select(choices, value=self.item.model, on_change=self.change_model)
+                    choices = list(ref_database.keys())
+                    ui.select(choices, value=self.item.ref, on_change=self.change_model)
 
                     self.ui_settings_container = ui.element('div')
 
@@ -73,7 +73,7 @@ class ItemDeviceEditor:
 
     def change_model(self, e):
         # print(e.value)
-        self.item.model = e.value
+        self.item.ref = e.value
         self.item.notify()
 
         self.update_model_specifics()
@@ -89,7 +89,7 @@ class ItemDeviceEditor:
 
     def update_model_specifics(self):
 
-        params = model_database.get(self.item.model, None)
+        params = ref_database.get(self.item.ref, None)
         if params:
             self.ui_image.source = f'images/{params["img"]}'
             # print(self.ui_image.source)
