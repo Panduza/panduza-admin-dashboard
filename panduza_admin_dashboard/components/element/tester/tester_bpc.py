@@ -63,6 +63,7 @@ class TesterBpc:
         self.current_change = e.value
 
     def apply_current_change(self):
+        self.bpc.current.value.set(self.current_change)
         self.current_change = None
         self.ui_current_apply.disable()
 
