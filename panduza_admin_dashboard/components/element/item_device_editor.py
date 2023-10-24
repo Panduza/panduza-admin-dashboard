@@ -10,6 +10,14 @@ ref_database = {
         "img": "hm310t.jpg",
         "settings": {}
     },
+    "Korad.KA3005P": {
+        "img": "korad_ka3005p.jpg",
+        "settings": {}
+    },
+    "Tenma.722710": {
+        "img": "tenma_722710.jpg",
+        "settings": {}
+    },
     "Panduza.FakeBps": {
         "img": "fake_psu.jpg",
         "settings": [
