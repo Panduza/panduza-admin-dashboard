@@ -24,7 +24,7 @@ setup(
     zip_safe=False,
 
     install_requires=[
-        'nicegui==1.3.1',
+        'nicegui==1.4.1',
     ],
 
     classifiers=[
